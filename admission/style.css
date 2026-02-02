@@ -1,0 +1,160 @@
+/* ===============================
+   GLOBAL RESET
+================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* ===============================
+   PAGE BACKGROUND (IMAGE)
+================================ */
+body {
+    min-height: 100vh;
+    background:
+    
+        url("https://tse1.mm.bing.net/th/id/OIP.CFaC6XnkgFufvXoy-oyOYwHaFk?rs=1&pid=ImgDetMain&o=7&rm=3");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ===============================
+   MAIN CONTAINER
+================================ */
+.container {
+    width: 420px;
+    background: #ffffff;
+    padding: 28px 30px;
+    border-radius: 14px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+}
+
+/* ===============================
+   HEADING
+================================ */
+.container h2 {
+    text-align: center;
+    margin-bottom: 22px;
+    color: #0f172a;
+}
+
+/* ===============================
+   ROWS
+================================ */
+.row {
+    margin-bottom: 15px;
+}
+
+/* ===============================
+   LABELS
+================================ */
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: #0f172a;
+}
+
+/* ===============================
+   INPUTS & SELECT
+================================ */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    font-size: 14px;
+    outline: none;
+}
+
+input:focus,
+select:focus {
+    border-color: #2563eb;
+}
+
+/* ===============================
+   RADIO BUTTON GROUP
+================================ */
+.radio-group {
+    display: flex;
+    gap: 18px;
+    margin-bottom: 18px;
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* ===============================
+   ELIGIBILITY BOX
+================================ */
+.eligibility-box {
+    padding: 10px;
+    border-radius: 6px;
+    background: #f1f5f9;
+    border: 1px dashed #94a3b8;
+    font-size: 13px;
+    color: #334155;
+}
+
+/* ===============================
+   CHECKBOX
+================================ */
+.checkbox label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+}
+
+/* ===============================
+   BUTTON
+================================ */
+button {
+    width: 100%;
+    padding: 12px;
+    background: #2563eb;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
+
+button:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+}
+
+/* ===============================
+   MOBILE RESPONSIVE
+================================ */
+@media (max-width: 480px) {
+    .container {
+        width: 95%;
+        padding: 22px;
+    }
+
+    .radio-group {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+}
