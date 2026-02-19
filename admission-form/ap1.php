@@ -165,8 +165,110 @@ $application_no = $prefix . "-" . $year . "-" . $formattedNumber;
 
     <style>
     body{font-family:Arial;background:#f2f2f2;margin:0;}
-    .top-header{background:#003366;color:#fff;padding:15px;}
-    .logo{display:flex;align-items:center;gap:15px;}
+   /* ===============================
+   HEADER DESIGN
+================================ */
+
+.top-header {
+    background: #4a90c2;   /* Your blue color */
+    padding: 15px 0;
+}
+
+/* Main Header Layout */
+.header-container {
+    width: 95%;
+    max-width: 1300px;
+    margin: -29px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+}
+
+.header-logo-section {
+    padding-left: 30px;   /* Move logo right */
+}
+
+
+/* ===============================
+   LOGO
+================================ */
+.header-logo-section img {
+    width: 150px;   /* Adjust logo size here */
+    height: auto;
+   margin: 20px;
+}
+
+/* ===============================
+   CENTER TEXT
+================================ */
+.header-title {
+    text-align: left;
+    color: white;
+}
+
+.tamil-text {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.english-text {
+    font-size: 15px;
+    margin-top: 5px;
+}
+
+/* ===============================
+   NAVIGATION
+================================ */
+.header-nav {
+    display: flex;
+    gap: 30px;
+    padding-right: 0px;  /* Move nav more right */
+    transform: translateX(180px);
+}
+
+
+
+.header-nav a {
+    
+    text-decoration: none;
+    color: white;
+    font-size: 15px;
+    position: relative;
+    padding-bottom: 4px;
+}
+
+/* Gold underline */
+.header-nav a::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background: gold;
+    left: 0;
+    bottom: 0;
+    transition: 0.3s;
+}
+
+.header-nav a:hover::after,
+.header-nav a.active::after {
+    width: 100%;
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
+@media (max-width: 768px) {
+    .header-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 15px;
+    }
+
+    .header-nav {
+        justify-content: center;
+    }
+}
+
     .container{width:1000px;margin:20px auto;background:white;padding:25px;}
     h2{text-align:center;margin-bottom:20px;}
 
@@ -215,14 +317,32 @@ $application_no = $prefix . "-" . $year . "-" . $formattedNumber;
     <body>
 
     <header class="top-header">
-    <div class="logo">
-    <img src="image/Univ.png" height="60">
-    <div>
-    <strong>சென்னை பல்கலைக்கழகம் – தொலைதூரக் கல்வி நிறுவனம்</strong><br>
-    University of Madras – Institute of Distance Education
+    <div class="header-container">
+
+        <!-- LEFT: Logo -->
+        <div class="header-logo-section">
+            <img src="image/Univ.png" alt="University Logo">
+        </div>
+
+        <!-- CENTER: Text -->
+        <div class="header-title">
+            <div class="tamil-text">
+                சென்னை பல்கலைக்கழகம் – தொலைதூரக் கல்வி நிறுவனம்
+            </div>
+            <div class="english-text">
+                University of Madras – Institute of Distance Education
+            </div>
+        </div>
+
+        <!-- RIGHT: Navigation -->
+        <nav class="header-nav">
+            <a href="../index.php" class="active">Home</a>
+            <a href="#">About Us</a>
+            <a href="#">Contact Us</a>
+        </nav>
+
     </div>
-    </div>
-    </header>
+</header>
 
     <main class="container">
 

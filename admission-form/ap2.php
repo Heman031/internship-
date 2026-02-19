@@ -249,27 +249,37 @@ if ($course_type === "PG") {
   
 
 <!-- HEADER -->
-<header class="top-header">
-  <div class="app">
-    <div class="logo">
-      <img src="image/Univ.png" alt="University Logo">
-      <div class="logo-text">
-        <div class="tamil-text">
-          சென்னை பல்கலைக்கழகம் – தொலைதூரக் கல்வி நிறுவனம்
-        </div>
-        <div class="english-text">
-          University of Madras – Institute of Distance Education
-        </div>
-      </div>
-    </div>
 
-    <nav class="nav">
-      <a class="active" href="#">Home</a>
-      <a href="#">About Us</a>
-      <a href="#">Contact Us</a>
-    </nav>
-  </div>
+
+    <header class="top-header">
+    <div class="header-container">
+
+        <!-- LEFT: Logo -->
+        <div class="header-logo-section">
+            <img src="image/Univ.png" alt="University Logo">
+        </div>
+
+        <!-- CENTER: Text -->
+        <div class="header-title">
+            <div class="tamil-text">
+                சென்னை பல்கலைக்கழகம் – தொலைதூரக் கல்வி நிறுவனம்
+            </div>
+            <div class="english-text">
+                University of Madras – Institute of Distance Education
+            </div>
+        </div>
+
+        <!-- RIGHT: Navigation -->
+        <nav class="header-nav">
+            <a href="../index.php" class="active">Home</a>
+            <a href="#">About Us</a>
+            <a href="#">Contact Us</a>
+        </nav>
+
+    </div>
 </header>
+
+
 
 <!-- BANNER -->
 <section class="banner">
