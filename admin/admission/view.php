@@ -181,7 +181,7 @@ function showFile($file, $label, $baseURL, $basePath, $appFolder) {
 
 <?php
 showFile($data['sslc_file'], "View SSLC", $baseURL, $basePath, $appFolder);
-showFile($data['hsc_file'], "View HSC", $baseURL, $basePath, $appFolder);
+showFile($data['hsc_file'], "View  HSC", $baseURL, $basePath, $appFolder);
 showFile($data['ug_file'], "View UG", $baseURL, $basePath, $appFolder);
 ?>
 <?php if($data['status']=="Pending"): ?>
