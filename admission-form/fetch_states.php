@@ -1,12 +1,5 @@
 <?php
-include "db.php";
-header("Content-Type: application/json");
+require "db.php";
 
-$result = $conn->query("SELECT id, state_name FROM states");
-
-$data = [];
-while ($row = $result->fetch_assoc()) {
-    $data[] = $row;
-}
-
-echo json_encode($data);
+$stmt = $pdo->query("SELECT id, state_name FROM states ORDER BY state_name");
+echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));

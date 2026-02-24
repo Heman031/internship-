@@ -2,6 +2,12 @@
 session_start();
 require "db.php";
 
+/* ===== FETCH STATES ===== */
+$states = $pdo->query("SELECT * FROM states ORDER BY state_name ASC")->fetchAll();
+
+/* ===== FETCH DISTRICTS ===== */
+$districts = $pdo->query("SELECT * FROM districts ORDER BY district_name ASC")->fetchAll();
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     /* ===== DOB VALIDATION ===== */
@@ -346,7 +352,7 @@ $application_no = $prefix . "-" . $year . "-" . $formattedNumber;
 
     <main class="container">
 
-    <h2>ADMISSION APPLICATION FORM - STEP 1</h2>
+    <h2>ADMISSION APPLICATION FORMz - STEP 1</h2>
 
     <form method="POST" enctype="multipart/form-data">
 
@@ -436,26 +442,14 @@ $application_no = $prefix . "-" . $year . "-" . $formattedNumber;
     <label>Town / Village Post *</label>
     <input type="text" name="town" required>
     </div>
-
-    <div class="form-row">
     <label>State *</label>
-    <select name="state" required>
+    <select name="state" id="state" required>
     <option value="">Select State</option>
-    <option value="Tamil Nadu">Tamil Nadu</option>
-    <option value="Kerala">Kerala</option>
-    <option value="Karnataka">Karnataka</option>
-    </select>
-    </div>
-
-    <div class="form-row">
+</select>
     <label>District *</label>
-    <select name="district" required>
+<select name="district" id="district" required>
     <option value="">Select District</option>
-    <option value="Chennai">Chennai</option>
-    <option value="Madurai">Madurai</option>
-    <option value="Coimbatore">Coimbatore</option>
-    </select>
-    </div>
+</select>
 
     <div class="form-row">
     <label>Pin Code *</label>
@@ -819,6 +813,38 @@ document.getElementById("programme_name")
             ${row.main_subject}
          </option>`;
     });
+
+});
+document.addEventListener("DOMContentLoaded", function () {
+
+  const stateSelect = document.getElementById("state");
+  const districtSelect = document.getElementById("district");
+
+  fetch("fetch_states.php")
+    .then(res => res.json())
+    .then(states => {
+      states.forEach(s => {
+        stateSelect.innerHTML += 
+          `<option value="${s.id}">${s.state_name}</option>`;
+      });
+    });
+
+  stateSelect.addEventListener("change", function () {
+
+    districtSelect.innerHTML = `<option>Select District</option>`;
+
+    if (!this.value) return;
+
+    fetch("fetch_districts.php?state_id=" + this.value)
+      .then(res => res.json())
+      .then(districts => {
+        districts.forEach(d => {
+          districtSelect.innerHTML += 
+            `<option value="${d}">${d}</option>`;
+        });
+      });
+
+  });
 
 });
 

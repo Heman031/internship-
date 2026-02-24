@@ -27,6 +27,7 @@
             <a class="active" href="#">Home</a>
             <a href="#">About Us</a>
             <a href="#">Contact Us</a>
+            <a href="admin/login.php">Admin Panel</a>
         </nav>
 
     </div>
