@@ -154,26 +154,36 @@ Print Application
 
 <h3>3. Uploaded Documents</h3>
 
-<?php if(!empty($data['sslc_file'])): ?>
-<a class="doc-btn" target="_blank"
-href="/admission/admission-form/uploads/<?php echo basename($data['sslc_file']); ?>">
-View SSLC
-</a>
-<?php endif; ?>
+<h3>3. Uploaded Documents</h3>
 
-<?php if(!empty($data['hsc_file'])): ?>
-<a class="doc-btn" target="_blank"
-href="/admission/admission-form/uploads/<?php echo basename($data['hsc_file']); ?>">
-View HSC
-</a>
-<?php endif; ?>
+<?php
+$baseURL  = "/admission/admission-form/uploads/";
+$basePath = $_SERVER['DOCUMENT_ROOT'] . $baseURL;
+$appFolder = $data['application_no'] . "/";
+?>
 
-<?php if(!empty($data['ug_file'])): ?>
-<a class="doc-btn" target="_blank"
-href="/admission/admission-form/uploads/<?php echo basename($data['ug_file']); ?>">
-View UG
-</a>
-<?php endif; ?>
+<?php
+function showFile($file, $label, $baseURL, $basePath, $appFolder) {
+    if(!empty($file)) {
+        $fileName = basename($file);
+        $fullPath = $basePath . $appFolder . $fileName;
+
+        if(file_exists($fullPath)) {
+            echo '<a class="doc-btn" target="_blank" href="' 
+                . $baseURL . $appFolder . $fileName . '">' 
+                . $label . '</a>';
+        } else {
+            echo '<p style="color:red;">' . $label . ' File Not Found</p>';
+        }
+    }
+}
+?>
+
+<?php
+showFile($data['sslc_file'], "View SSLC", $baseURL, $basePath, $appFolder);
+showFile($data['hsc_file'], "View HSC", $baseURL, $basePath, $appFolder);
+showFile($data['ug_file'], "View UG", $baseURL, $basePath, $appFolder);
+?>
 <?php if($data['status']=="Pending"): ?>
 
 <form method="POST">
