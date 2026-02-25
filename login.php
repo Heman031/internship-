@@ -232,7 +232,7 @@ footer {
             </div>
         </div>
         <nav class="nav">
-            <a href="form.php">Home</a>
+            <a href="index.php">Home</a>
             <a class="active" href="#">Login</a>
         </nav>
     </div>

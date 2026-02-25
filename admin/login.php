@@ -47,12 +47,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
 /* BODY */
 body{
-    background:linear-gradient(135deg,#1e3a8a,#2563eb);
     min-height:100vh;
-     background: url("image/back.jpeg");
+    margin:0;
+
+    background-image: url("../image/back.jpeg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    background-attachment: fixed;
+
+    position: relative;
 }
 
 /* HEADER */
@@ -223,6 +227,9 @@ body{
     <div class="login-box">
 
         <h2>Distance Education Admin</h2>
+        <div class="login-note">
+    🔒 This portal is restricted to authorized university administrators only.
+</div>
 
         <?php if($error): ?>
             <div class="error"><?php echo $error; ?></div>

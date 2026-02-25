@@ -164,6 +164,7 @@ value="<?php echo htmlspecialchars($search); ?>">
 <option value="UG" <?php if($type=="UG") echo "selected"; ?>>UG</option>
 <option value="PG" <?php if($type=="PG") echo "selected"; ?>>PG</option>
 <option value="DIP" <?php if($type=="DIP") echo "selected"; ?>>Diploma</option>
+<option value="CERT" <?php if($type=="DIP") echo "selected"; ?>>Certificate</option>
 </select>
 
 <button type="submit">Filter</button>
@@ -211,6 +212,10 @@ echo "<span class='badge rejected'>Rejected</span>";
 
 <td>
 <a class="btn view" href="view.php?id=<?php echo $row['id']; ?>">View</a>
+<a class="btn edit"
+href="edit.php?id=<?php echo $row['id']; ?>">
+Edit
+</a>
 </td>
 </tr>
 <?php endwhile; ?>

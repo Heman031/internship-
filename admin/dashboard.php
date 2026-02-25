@@ -12,6 +12,11 @@ $total = $conn->query("SELECT COUNT(*) c FROM records")->fetch_assoc()['c'];
 $pending = $conn->query("SELECT COUNT(*) c FROM records WHERE status='Pending'")->fetch_assoc()['c'];
 $approved = $conn->query("SELECT COUNT(*) c FROM records WHERE status='Approved'")->fetch_assoc()['c'];
 $rejected = $conn->query("SELECT COUNT(*) c FROM records WHERE status='Rejected'")->fetch_assoc()['c'];
+
+$ug  = $conn->query("SELECT COUNT(*) c FROM records WHERE course_type='UG'")->fetch_assoc()['c'];
+$pg  = $conn->query("SELECT COUNT(*) c FROM records WHERE course_type='PG'")->fetch_assoc()['c'];
+$dip = $conn->query("SELECT COUNT(*) c FROM records WHERE course_type='DIP'")->fetch_assoc()['c'];
+$cert= $conn->query("SELECT COUNT(*) c FROM records WHERE course_type='CERT'")->fetch_assoc()['c'];
 ?>
 
 <!DOCTYPE html>
@@ -35,28 +40,47 @@ $rejected = $conn->query("SELECT COUNT(*) c FROM records WHERE status='Rejected'
 
 <div class="card-container">
 
-<div class="card blue">
+<a href="admission/list.php" class="card blue">
 <h3>Total Applications</h3>
 <p><?php echo $total; ?></p>
-</div>
+</a>
 
-<div class="card orange">
+<a href="admission/list.php?status=Pending" class="card orange">
 <h3>Pending</h3>
 <p><?php echo $pending; ?></p>
-</div>
+</a>
 
-<div class="card green">
+<a href="admission/list.php?status=Approved" class="card green">
 <h3>Approved</h3>
 <p><?php echo $approved; ?></p>
-</div>
+</a>
 
-<div class="card red">
+<a href="admission/list.php?status=Rejected" class="card red">
 <h3>Rejected</h3>
 <p><?php echo $rejected; ?></p>
-</div>
+</a>
+
+<a href="admission/list.php?type=UG" class="card blue">
+<h3>UG Applications</h3>
+<p><?php echo $ug; ?></p>
+</a>
+
+<a href="admission/list.php?type=PG" class="card orange">
+<h3>PG Applications</h3>
+<p><?php echo $pg; ?></p>
+</a>
+
+<a href="admission/list.php?type=DIP" class="card green">
+<h3>Diploma Applications</h3>
+<p><?php echo $dip; ?></p>
+</a>
+
+<a href="admission/list.php?type=CERT" class="card red">
+<h3>Certificate Applications</h3>
+<p><?php echo $cert; ?></p>
+</a>
 
 </div>
-
 </div>
 
 </body>
