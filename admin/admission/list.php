@@ -142,7 +142,7 @@ function toggleSelectAll(source) {
 
 <div class="main">
 
-<h1>Application Processing</h1>
+<h1>Application Processing Admin</h1>
 <p>Total Records: <strong><?php echo $totalRows; ?></strong></p>
 
 <div class="card white">
