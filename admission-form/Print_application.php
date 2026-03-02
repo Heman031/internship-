@@ -10,7 +10,12 @@ if (!isset($_SESSION['application_no'])) {
 $appNo = $_SESSION['application_no'];
 
 try {
-    $stmt = $pdo->prepare("SELECT * FROM records WHERE application_no = :appNo");
+    $stmt = $pdo->prepare("
+SELECT r.*, s.state_name
+FROM records r
+LEFT JOIN states s ON r.state = s.id
+WHERE r.application_no = :appNo
+");
     $stmt->execute([':appNo' => $appNo]);
     $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -195,11 +200,15 @@ table th, table td{
 
     <!-- RIGHT PHOTO -->
     <div class="header-right">
-        <?php if(!empty($data['photo']) && file_exists("uploads/".$data['photo'])): ?>
-            <img src="uploads/<?php echo $data['photo']; ?>" class="photo">
-        <?php else: ?>
-            <div class="photo"></div>
-        <?php endif; ?>
+        <?php
+$photoPath = "uploads/" . $data['application_no'] . "/" . $data['photo'];
+?>
+
+<?php if(!empty($data['photo']) && file_exists($photoPath)): ?>
+    <img src="<?php echo $photoPath; ?>" class="photo">
+<?php else: ?>
+    <div class="photo"></div>
+<?php endif; ?>
     </div>
 
 </div>
@@ -292,7 +301,7 @@ table th, table td{
     <div class="col">
         <div class="row">
             <span class="label">State:</span>
-            <?php echo show('state',$data); ?>
+            <?php echo htmlspecialchars($data['state_name']); ?>
         </div>
 
         <div class="row">
@@ -323,39 +332,59 @@ function yesNo($value, $expected){
     return ($value == $expected) ? "☑" : "☐";
 }
 
-$abcOption = show('abc_option',$data);
-$abcID     = show('abc_id',$data);
+$abcStatus = $data['abc_status'] ?? '';
+$abcID     = $data['abc_id'] ?? '';
 ?>
 
 <!-- 1. ABC -->
 <div style="margin-bottom:12px;">
-    <strong> Academic Bank of Credit (ABC)</strong><br>
+<strong>Academic Bank of Credit (ABC)</strong><br>
 
-    <?php echo yesNo($abcOption,'Yes'); ?> Yes
-    &nbsp;&nbsp;
-    <?php echo yesNo($abcOption,'No'); ?> No
+<?php echo ($abcStatus == "Yes") ? "☑" : "☐"; ?> Yes
+&nbsp;&nbsp;
+<?php echo ($abcStatus == "No") ? "☑" : "☐"; ?> No
 
-    <?php if($abcOption == "Yes" && !empty($abcID)): ?>
-        <div style="margin-top:6px;">
-            <strong>ABC ID:</strong> <?php echo $abcID; ?>
-        </div>
-    <?php endif; ?>
+<?php if($abcStatus == "Yes" && !empty($abcID)): ?>
+<div style="margin-top:6px;">
+<?php
+$formattedABC = trim(chunk_split($abcID, 4, ' '));
+?>
+
+<strong>ABC ID:</strong> <?php echo $formattedABC; ?>
+</div>
+<?php endif; ?>
+
 </div>
 
 <!-- 2. Other Course -->
 <div style="margin-bottom:12px;">
-    <strong>Are you undergoing any other course in a College / University?</strong><br>
-    <?php echo yesNo(show('other_course',$data),'Yes'); ?> Yes
-    &nbsp;&nbsp;
-    <?php echo yesNo(show('other_course',$data),'No'); ?> No
+<strong>Are you undergoing any other course in a College / University?</strong><br>
+
+<?php echo ($data['other_course'] == "Yes") ? "☑" : "☐"; ?> Yes
+&nbsp;&nbsp;
+<?php echo ($data['other_course'] == "No") ? "☑" : "☐"; ?> No
+
+<?php if($data['other_course'] == "Yes" && !empty($data['other_course_details'])): ?>
+<div style="margin-top:6px;">
+<strong>Details:</strong>
+<?php echo htmlspecialchars($data['other_course_details']); ?>
+</div>
+<?php endif; ?>
+
 </div>
 
-<!-- 3. Defence Ward -->
+<!-- 3. Defence -->
 <div style="margin-bottom:12px;">
-    <strong>Ward of Defence Personnel / Ex-Servicemen *</strong><br>
-    <?php echo yesNo(show('defence_ward',$data),'Yes'); ?> Yes
-    &nbsp;&nbsp;
-    <?php echo yesNo(show('defence_ward',$data),'No'); ?> No
+<strong>Ward of Defence Personnel / Ex-Servicemen</strong><br>
+
+<?php echo (!empty($data['defence_personnel'])) ? "☑" : "☐"; ?>
+Defence Personnel
+
+&nbsp;&nbsp;&nbsp;
+
+<?php echo (!empty($data['ex_servicemen'])) ? "☑" : "☐"; ?>
+Ex-Servicemen
+
 </div>
 
 </div>

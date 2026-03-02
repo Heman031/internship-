@@ -33,6 +33,14 @@ td{ padding:8px; border-bottom:1px solid #ddd; }
 <td><?php echo htmlspecialchars($data['application_no']); ?></td>
 </tr>
 
+<?php if(!empty($data['enrollment_no'])): ?>
+<tr>
+<td class="label">Enrollment Number</td>
+<td><?php echo htmlspecialchars($data['enrollment_no']); ?></td>
+</tr>
+<?php endif; ?>
+
+
 <tr>
 <td class="label">Name</td>
 <td><?php echo htmlspecialchars($data['name']); ?></td>

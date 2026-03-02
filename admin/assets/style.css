@@ -331,10 +331,14 @@ textarea{
 }
 
 .card{
-    padding:20px;
-    border-radius:14px;
+    padding:13px;
+    border-radius:8px;
+    min-height:40px;  
     color:rgb(32, 32, 32);
     box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+.card h2{
+    font-size:28px;            /* Number smaller */
 }
 
 .card h3{
@@ -349,7 +353,7 @@ textarea{
 }
 
 .blue{ background:#f6f8fc; }
-.orange{ background:#ffb682; }
+.orange{ background:#eba755; }
 .green{ background:#5bdd8b; }
 .red{ background:#e66363; }
 
@@ -460,4 +464,51 @@ textarea{
 .action-bar{
     display:flex;
     gap:10px;
+}
+/* ===== HEADER ===== */
+.top-header{
+    background:#003366;
+    color:#fff;
+    padding:15px 0;
+    border-bottom:5px solid #00efdf;
+}
+
+.app{
+    width:95%;
+    margin:auto;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.logo img{
+    width:90px;
+    height:70px;
+    object-fit:contain;
+}
+
+.university-text{
+    font-size:16px;
+    line-height:1.4;
+}
+
+.university-text strong{
+    font-size:18px;
+}
+
+.nav a{
+    color:#fff;
+    text-decoration:none;
+    margin-left:20px;
+    font-weight:500;
+}
+
+.nav a:hover{
+    text-decoration:underline;
 }

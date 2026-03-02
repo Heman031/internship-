@@ -193,10 +193,10 @@ value="<?php echo htmlspecialchars($search); ?>">
 <tr>
 <td><input type="checkbox" name="ids[]" value="<?php echo $row['id']; ?>"></td>
 <td><?php echo $row['application_no']; ?></td>
+
 <td><?php echo $row['name']; ?></td>
 <td><?php echo $row['programme_name']; ?></td>
 <td><?php echo $row['mobile']; ?></td>
-
 <td>
 <?php
 if($row['status']=="Pending")
