@@ -84,6 +84,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST"){
 <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
+    
 <div class="sidebar">
 <h2>Distance Education</h2>
 
@@ -126,8 +127,10 @@ value="<?= $data['main_subject'] ?>">
 
 <div class="form-group">
 <label>Medium of Study</label>
-<input type="text" name="medium"
-value="<?= $data['medium'] ?>">
+<select name="medium">
+<option <?= $data['medium']=="English"?"selected":"" ?>>English</option>
+<option <?= $data['medium']=="Tamil"?"selected":"" ?>>Tamil</option>
+</select>
 </div>
 
 <div class="form-group">
@@ -135,8 +138,16 @@ value="<?= $data['medium'] ?>">
 
 <?php if($data['course_type']=="UG"): ?>
 <select name="foundation_lang">
-<option <?= $data['foundation_lang']=="English"?"selected":"" ?>>English</option>
 <option <?= $data['foundation_lang']=="Tamil"?"selected":"" ?>>Tamil</option>
+<option <?= $data['foundation_lang']=="Telugu"?"selected":"" ?>>Telugu</option>
+<option <?= $data['foundation_lang']=="Kannada"?"selected":"" ?>>Kannada</option>
+<option <?= $data['foundation_lang']=="Malayalam"?"selected":"" ?>>Malayalam</option>
+<option <?= $data['foundation_lang']=="Hindi"?"selected":"" ?>>Hindi</option>
+<option <?= $data['foundation_lang']=="Urdu"?"selected":"" ?>>Urdu</option>
+<option <?= $data['foundation_lang']=="Sanskrit"?"selected":"" ?>>Sanskrit</option>
+<option <?= $data['foundation_lang']=="Arabic"?"selected":"" ?>>Arabic</option>
+<option <?= $data['foundation_lang']=="French"?"selected":"" ?>>French</option>
+<option <?= $data['foundation_lang']=="Communicative English"?"selected":"" ?>>Communicative English</option>
 </select>
 <?php else: ?>
 <input type="text" value="English" readonly>

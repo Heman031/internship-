@@ -55,27 +55,28 @@ body{
 
 .header{
     display:flex;
-    align-items:flex-start;
+    align-items:center;
     justify-content:space-between;
     margin-bottom:10px;
 }
 
-.header-left{
-    width:120px;
+.header-left,
+.header-right{
+    width:150px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
 }
 
 .header-center{
     flex:1;
     text-align:center;
-}
-
-.header-right{
-    width:140px;
-    text-align:right;
+    padding:0 10px;
 }
 
 .logo{
-    width:100px;
+    width:110px;
+    height:auto;
 }
 
 .photo{
@@ -84,7 +85,6 @@ body{
     border:1px solid #000;
     object-fit:cover;
 }
-
 h1{
     margin:0;
     font-size:22px;
@@ -172,15 +172,26 @@ table th, table td{
     body{ background:#fff; }
     .print-btn{ display:none; }
 }
+.print-btn button{
+    padding:8px 20px;
+    font-size:14px;
+    border:none;
+    background:#000;
+    color:#fff;
+    cursor:pointer;
+    border-radius:4px;
+}
 
+.print-btn button:hover{
+    background:#333;
+}
 </style>
 </head>
 
 <body>
 
 <div class="container">
-
-<!-- HEADER -->
+ 
 <!-- HEADER -->
 <div class="header">
 
@@ -199,18 +210,22 @@ table th, table td{
     </div>
 
     <!-- RIGHT PHOTO -->
-    <div class="header-right">
-        <?php
-$photoPath = "uploads/" . $data['application_no'] . "/" . $data['photo'];
+ <?php
+$photoFile = trim($data['photo'] ?? '');
+
+$uploadDir = __DIR__ . "/uploads/" . $appNo . "/";
+$photoPath = $uploadDir . $photoFile;
+$photoURL  = "uploads/" . $appNo . "/" . $photoFile;
+
 ?>
 
-<?php if(!empty($data['photo']) && file_exists($photoPath)): ?>
-    <img src="<?php echo $photoPath; ?>" class="photo">
+<div class="header-right">
+<?php if(!empty($photoFile) && file_exists($photoPath)): ?>
+    <img src="<?php echo $photoURL; ?>" class="photo">
 <?php else: ?>
     <div class="photo"></div>
 <?php endif; ?>
-    </div>
-
+</div>
 </div>
 
 <hr>
@@ -233,6 +248,9 @@ $photoPath = "uploads/" . $data['application_no'] . "/" . $data['photo'];
     <div class="col">
         <div class="row"><span class="label">Main Subject:</span> <?php echo show('main_subject',$data); ?></div>
         <div class="row"><span class="label">Medium:</span> <?php echo show('medium',$data); ?></div>
+        <div class="row"><span class="label">Specially Challenged Status:</span> <?php echo !empty($data['differently_abled']) ? htmlspecialchars($data['differently_abled']) : 'Not Applicable'; ?></div>
+    
+    
     </div>
 </div>
 <hr>
@@ -295,6 +313,8 @@ $photoPath = "uploads/" . $data['application_no'] . "/" . $data['photo'];
             <span class="label">Pincode:</span>
             <?php echo show('pincode',$data); ?>
         </div>
+
+
     </div>
 
     <!-- RIGHT COLUMN -->
@@ -313,11 +333,23 @@ $photoPath = "uploads/" . $data['application_no'] . "/" . $data['photo'];
             <span class="label">Phone:</span>
             <?php echo show('phone',$data); ?>
         </div>
+        
+        <div class="row">
+            <span class="label">Blood Group:</span>
+            <?php echo show('blood_group',$data); ?>
+        </div>
+
+        <div class="row">
+            <span class="label">Are you currently employed?</span>
+            <?php echo show('employment_status',$data); ?>
+            <div>
+            <strong>Details:</strong>
+            <?php echo htmlspecialchars($data['employment_type']); ?>
+            </div>
+        </div>
     </div>
 
 </div>
-
-
 
 
 <hr>
@@ -349,7 +381,6 @@ $abcID     = $data['abc_id'] ?? '';
 <?php
 $formattedABC = trim(chunk_split($abcID, 4, ' '));
 ?>
-
 <strong>ABC ID:</strong> <?php echo $formattedABC; ?>
 </div>
 <?php endif; ?>
@@ -385,6 +416,9 @@ Defence Personnel
 <?php echo (!empty($data['ex_servicemen'])) ? "☑" : "☐"; ?>
 Ex-Servicemen
 
+&nbsp;&nbsp;&nbsp;
+<?php echo (!empty($data['none'])) ? "☑" : "☐"; ?>
+None
 </div>
 
 </div>
@@ -489,3 +523,8 @@ $declarationChecked = "☑";
     </div>
 
 </div>
+<div class="print-btn">
+    <button onclick="window.print()">🖨 Print Application</button>
+</div>
+
+</body>

@@ -450,7 +450,7 @@ textarea{
     padding:10px;
     border:1px solid #ccc;
     border-radius:6px;
-    width:100%;
+    width:80%;
 }
 
 /* Certificates grid */
@@ -511,4 +511,36 @@ textarea{
 
 .nav a:hover{
     text-decoration:underline;
+}
+body{
+margin:0;
+font-family:Arial;
+}
+
+.uni-header{
+display:flex;
+align-items:center;
+background:#4a97d1;
+color:white;
+padding:15px 20px;
+margin-bottom:20px;
+}
+
+.uni-logo{
+width:70px;
+margin-right:15px;
+}
+
+.uni-title{
+line-height:1.4;
+}
+
+.tamil-title{
+font-size:20px;
+font-weight:bold;
+}
+
+.eng-title{
+font-size:22px;
+font-weight:bold;
 }

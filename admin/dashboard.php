@@ -30,7 +30,7 @@ $cert= $conn->query("SELECT COUNT(*) c FROM records WHERE course_type='CERT'")->
   <div class="app">
     
     <div class="logo">
-      <img src="image/Univ.png" alt="University Logo">
+      <img src="../image/Univ.png" alt="University Logo">
       <div class="university-text">
         <strong>சென்னை பல்கலைக்கழகம் – தொலைதூரக் கல்வி நிறுவனம்</strong><br>
         University of Madras – Institute of Distance Education

@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
         $mail->Username = 'hemaoffice153@gmail.com';
-        $mail->Password = 'pqub jypz oxfn dzkg'; // App password
+        $mail->Password = 'pqub jypz oxfn dzkg';
         $mail->SMTPSecure = 'tls';
         $mail->Port = 587;
 
@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $mail->Body = "<h2>Your OTP: $otp</h2><p>Valid for 5 minutes</p>";
         $mail->send();
 
-        header("Location: verify_otp.php");
+        header("Location: reset_otp.php");
         exit;
 
     } else {
@@ -58,123 +58,239 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
 <title>Forgot Password | Distance Education</title>
-<link rel="stylesheet" href="reset_password.php">
 
 <style>
-/* SAME STYLE AS LOGIN BOX */
-.banner {
-    min-height: calc(100vh - 140px);
-    background: url("image/back.jpeg") no-repeat center center/cover;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+
+/* HEADER */
+
+.header{
+background:#10264b;
+padding:20px 0;
+color:white;
 }
 
-.login-box {
-    background: rgba(255,255,255,0.96);
-    width: 380px;
-    padding: 35px;
-    border-radius: 6px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+.header-container{
+width:90%;
+margin:auto;
+display:flex;
+align-items:center;
 }
 
-.login-box h2 {
-    margin-bottom: 15px;
-    color: #0c1d42;
-    font-size: 24px;
-    text-align: center;
+.logo-box{
+width:25%;
 }
 
-.login-box p.info {
-    font-size: 14px;
-    color: #555;
-    margin-bottom: 15px;
-    text-align: center;
+.logo-box img{
+height:90px;
 }
 
-.login-box input {
-    width: 100%;
-    padding: 12px;
-    margin: 12px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 15px;
+.title-box{
+width:50%;
+text-align:center;
 }
 
-.login-box input:focus {
-    border-color: #0c1d42;
-    outline: none;
+.title-box h1{
+margin:0;
+font-size:30px;
+letter-spacing:1px;
 }
 
-.login-box button {
-    background: #0c1d42;
-    color: white;
-    padding: 12px;
-    width: 100%;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
+.title-box p{
+margin:5px 0 0;
+font-size:16px;
 }
 
-.login-box button:hover {
-    background: #142d6b;
+.empty-box{
+width:25%;
 }
 
-.error {
-    background: #ffe5e5;
-    color: #c62828;
-    padding: 8px;
-    border-radius: 4px;
-    font-size: 14px;
-    margin-bottom: 10px;
-    text-align: center;
+.logo{
+position:absolute;
+left:0;
+height:60px;
 }
 
-.back-link {
-    margin-top: 15px;
-    text-align: center;
-    font-size: 14px;
+.university-name{
+text-align:center;
 }
 
-.back-link a {
-    color: #1a73e8;
-    text-decoration: none;
+.university-name h1{
+margin:0;
+font-size:26px;
 }
 
-.back-link a:hover {
-    text-decoration: underline;
+.university-name p{
+margin:0;
+font-size:14px;
 }
+
+
+/* BANNER */
+
+.banner{
+min-height: calc(100vh - 160px);
+background:url("image/back.jpeg") no-repeat center/cover;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+
+/* LOGIN BOX */
+
+.login-box{
+background:rgba(255,255,255,0.96);
+width:380px;
+padding:35px;
+border-radius:6px;
+box-shadow:0 10px 25px rgba(0,0,0,0.25);
+}
+
+.login-box h2{
+margin-bottom:15px;
+color:#0c1d42;
+font-size:24px;
+text-align:center;
+}
+
+.login-box p.info{
+font-size:14px;
+color:#555;
+margin-bottom:15px;
+text-align:center;
+}
+
+.login-box input{
+width:100%;
+padding:12px;
+margin:12px 0;
+border:1px solid #ccc;
+border-radius:4px;
+font-size:15px;
+}
+
+.login-box input:focus{
+border-color:#0c1d42;
+outline:none;
+}
+
+.login-box button{
+background:#0c1d42;
+color:white;
+padding:12px;
+width:100%;
+border:none;
+border-radius:4px;
+font-size:16px;
+cursor:pointer;
+}
+
+.login-box button:hover{
+background:#142d6b;
+}
+
+.error{
+background:#ffe5e5;
+color:#c62828;
+padding:8px;
+border-radius:4px;
+font-size:14px;
+margin-bottom:10px;
+text-align:center;
+}
+
+.back-link{
+margin-top:15px;
+text-align:center;
+font-size:14px;
+}
+
+.back-link a{
+color:#1a73e8;
+text-decoration:none;
+}
+
+.back-link a:hover{
+text-decoration:underline;
+}
+
+
+/* FOOTER */
+
+.footer{
+background:#0c1d42;
+color:white;
+text-align:center;
+padding:12px;
+font-size:14px;
+}
+
 </style>
 </head>
 
 <body>
 
-<div class="banner">
-    <div class="login-box">
 
-        <h2>Forgot Password</h2>
-        <p class="info">Enter your registered email to receive OTP</p>
+<!-- HEADER -->
+<div class="header">
 
-        <?php if ($msg): ?>
-            <div class="error"><?php echo $msg; ?></div>
-        <?php endif; ?>
+    <div class="header-container">
 
-        <form method="post">
-            <input type="email" name="email" placeholder="Registered Email" required>
-            <button type="submit">Send OTP</button>
-        </form>
-
-        <div class="back-link">
-            <p><a href="login.php">← Back to Login</a></p>
+        <div class="logo-box">
+            <img src="image/Univ.png" alt="University Logo">
         </div>
 
+        <div class="title-box">
+            <h1>DISTANCE EDUCATION</h1>
+            <p>Online Admission Portal</p>
+        </div>
+
+        <div class="empty-box"></div>
+
     </div>
+
 </div>
+
+
+<!-- MAIN CONTENT -->
+
+<div class="banner">
+
+<div class="login-box">
+
+<h2>Forgot Password</h2>
+<p class="info">Enter your registered email to receive OTP</p>
+
+<?php if ($msg): ?>
+<div class="error"><?php echo $msg; ?></div>
+<?php endif; ?>
+
+<form method="post">
+<input type="email" name="email" placeholder="Registered Email" required>
+<button type="submit">Send OTP</button>
+</form>
+
+<div class="back-link">
+<p><a href="login.php">← Back to Login</a></p>
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- FOOTER -->
+
+<div class="footer">
+© <?php echo date("Y"); ?> Distance Education Admission Portal. All Rights Reserved.
+</div>
+
 
 </body>
 </html>

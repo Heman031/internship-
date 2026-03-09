@@ -43,102 +43,127 @@ if($_SERVER['REQUEST_METHOD'] === "POST"){
     }
 
     switch($action){
+case "approve":
 
-    case "approve":
+$status = "Approved";
 
-        $status = "Approved";
+if(empty($data['medium'])){
+    die("Please select medium before approving.");
+}
 
-        if(empty($data['medium'])){
-            die("Please select medium before approving.");
-        }
+if(empty($data['enrollment_no'])){
 
-        if(empty($data['enrollment_no'])){
+    /* Admission Cycle */
+    $month = date("n");
+    $period = ($month <= 6) ? "A" : "C";
 
-            // Academic / Calendar
-            $month = date("n");
-            $period = ($month <= 6) ? "A" : "C";
-            $year = date("y");   // gives 26 instead of 2026
-            $centerCode = "101";
+    /* Last 2 digits of year */
+    $year = date("y");
 
-            // Detect correct master table
-            if($data['course_type'] == "UG"){
-                $courseTable = "ug_courses";
-            } elseif($data['course_type'] == "PG"){
-                $courseTable = "pg_courses";
-            } elseif($data['course_type'] == "DIP"){
-                $courseTable = "diploma_courses";
-            } else {
-                $courseTable = "certificate_courses";
-            }
+    $centerCode = "101";
 
-            // Fetch course_code
-            $getCourse = $conn->prepare("
-                SELECT course_code
-                FROM $courseTable
-                WHERE programme_degree = ?
-                AND main_subject = ?
-                LIMIT 1
-            ");
-            $getCourse->bind_param("ss",
-                $data['programme_name'],
-                $data['main_subject']
-            );
-            $getCourse->execute();
-            $courseRow = $getCourse->get_result()->fetch_assoc();
+    /* Detect Course Table */
+    if($data['course_type'] == "UG"){
+        $courseTable = "ug_courses";
+    }
+    elseif($data['course_type'] == "PG"){
+        $courseTable = "pg_courses";
+    }
+    elseif($data['course_type'] == "DIP"){
+        $courseTable = "diploma_courses";
+    }
+    else{
+        $courseTable = "certificate_courses";
+    }
 
-            if(!$courseRow){
-                die("Course not found in master table.");
-            }
+    /* Fetch Course Code */
+    $getCourse = $conn->prepare("
+        SELECT course_code
+        FROM $courseTable
+        WHERE programme_degree=? 
+        AND main_subject=?
+        LIMIT 1
+    ");
 
-            $courseCode = strtoupper(trim($courseRow['course_code']));
+    $getCourse->bind_param(
+        "ss",
+        $data['programme_name'],
+        $data['main_subject']
+    );
 
-            $basePrefix = $period.$year.$centerCode;
-            $prefix = $basePrefix.$courseCode;
+    $getCourse->execute();
+    $courseRow = $getCourse->get_result()->fetch_assoc();
 
-            // Normalize medium
-            $medium = strtolower(trim($data['medium']));
+    if(!$courseRow){
+        die("Course code not found.");
+    }
 
-            if($medium == "english"){
-                $startNumber = 6001;
-            } elseif($medium == "tamil"){
-                $startNumber = 5001;
-            } else {
-                die("Invalid medium selected.");
-            }
+    $courseCode = strtoupper(trim($courseRow['course_code']));
 
-            // Get last enrollment for SAME course + SAME medium
-            $check = $conn->prepare("
-    SELECT MAX(CAST(RIGHT(enrollment_no,4) AS UNSIGNED)) as last_number
-    FROM records
-    WHERE enrollment_no LIKE ?
-    AND LOWER(medium) = ?
-");
+    /* Build Prefix */
+    $prefix = $period.$year.$centerCode.$courseCode;
 
-$like = $basePrefix . "%";   // IMPORTANT CHANGE HERE
-$check->bind_param("ss", $like, $medium);
+    /* Medium numbering */
+    $medium = strtolower(trim($data['medium']));
+
+    if($medium == "english"){
+        $startNumber = 6001;
+    }
+    elseif($medium == "tamil"){
+        $startNumber = 5001;
+    }
+    else{
+        die("Invalid medium.");
+    }
+
+    /* Find last enrollment number based on MEDIUM ONLY */
+
+if($medium == "english"){
+    
+    $check = $conn->prepare("
+        SELECT MAX(CAST(RIGHT(enrollment_no,4) AS UNSIGNED)) AS last_number
+        FROM records
+        WHERE CAST(RIGHT(enrollment_no,4) AS UNSIGNED) >= 6001
+    ");
+
+}
+elseif($medium == "tamil"){
+
+    $check = $conn->prepare("
+        SELECT MAX(CAST(RIGHT(enrollment_no,4) AS UNSIGNED)) AS last_number
+        FROM records
+        WHERE CAST(RIGHT(enrollment_no,4) AS UNSIGNED) >= 5001
+        AND CAST(RIGHT(enrollment_no,4) AS UNSIGNED) < 6000
+    ");
+
+}
+
 $check->execute();
 $res = $check->get_result()->fetch_assoc();
 
 if(!empty($res['last_number'])){
     $newNumber = $res['last_number'] + 1;
-} else {
+}else{
     $newNumber = $startNumber;
 }
 
-$newNumber = str_pad($newNumber, 4, "0", STR_PAD_LEFT);
+    /* Format serial */
+    $newNumber = str_pad($newNumber,4,"0",STR_PAD_LEFT);
 
-            $enrollmentNo = $prefix.$newNumber;
+    $enrollmentNo = $prefix.$newNumber;
 
-            $save = $conn->prepare("
-                UPDATE records
-                SET enrollment_no=?
-                WHERE id=?
-            ");
-            $save->bind_param("si",$enrollmentNo,$id);
-            $save->execute();
-        }
+    /* Save Enrollment */
+    $save = $conn->prepare("
+        UPDATE records
+        SET enrollment_no=?
+        WHERE id=?
+    ");
 
-        break;
+    $save->bind_param("si",$enrollmentNo,$id);
+    $save->execute();
+}
+
+break;
 
     case "reject":
         $status = "Rejected";
@@ -199,7 +224,7 @@ elseif($data['status']=="Rejected") $statusClass="badge-rejected";
     width:150px;
     height:180px;
     object-fit:cover;
-    border:2px solid #003366;
+    border:2px solid #000000;
     border-radius:6px;
 }
 
@@ -209,16 +234,16 @@ elseif($data['status']=="Rejected") $statusClass="badge-rejected";
 
 .section{
     margin-top:20px;
-    border:1px solid #ddd;
+    border:1px solid #030303;
     border-radius:6px;
     padding:15px;
 }
 
 .section h3{
     margin-top:0;
-    border-bottom:2px solid #003366;
+    border-bottom:2px solid #0c0c0c;
     padding-bottom:6px;
-    color:#003366;
+    color:#0c0c0c;
 }
 
 .details-table{
@@ -253,16 +278,17 @@ elseif($data['status']=="Rejected") $statusClass="badge-rejected";
 }
 
 .approval-box{
-    margin-top:20px;
+    margin-top:30px;
     border:1px solid #ccc;
     padding:15px;
     border-radius:6px;
     background:#f9f9f9;
+    
 }
 
 textarea{
-    width:100%;
-    padding:8px;
+    width:98%;
+    padding:15px;
 }
 
 </style>
@@ -343,40 +369,74 @@ No Photo
 </div>
 <!-- COURSE DETAILS -->
 <div class="section">
-<h3>Course Details</h3>
+<h3> COURSE DETAILS</h3>
 <table class="details-table">
 <tr><td>Course Type</td><td><?php echo $data['course_type']; ?></td></tr>
 <tr><td>Programme</td><td><?php echo $data['programme_name']; ?></td></tr>
 <tr><td>Main Subject</td><td><?php echo $data['main_subject']; ?></td></tr>
 <tr><td>Foundation Language</td><td><?php echo $data['foundation_lang']; ?></td></tr>
 <tr><td>Medium</td><td><?php echo $data['medium']; ?></td></tr>
+<tr>
+<td>Specially Challenged</td>
+<td>
+<?php echo !empty($data['differently_abled']) 
+        ? htmlspecialchars($data['differently_abled']) 
+        : 'No'; ?>
+</td>
+</tr>
 </table>
 </div>
 
 <!-- PERSONAL DETAILS -->
 <div class="section">
-<h3>Personal Details</h3>
-<table class="details-table">
-<tr><td>Name</td><td><?php echo $data['name']; ?></td></tr>
-<tr><td>Name (Tamil)</td><td><?php echo $data['name_tamil']; ?></td></tr>
-<tr><td>DOB</td><td><?php echo $data['dob']; ?></td></tr>
-<tr><td>Age</td><td><?php echo $data['age']; ?></td></tr>
-<tr><td>Mobile</td><td><?php echo $data['mobile']; ?></td></tr>
-<tr><td>Email</td><td><?php echo $data['email']; ?></td></tr>
-<tr><td>Aadhaar</td><td><?php echo $data['aadhaar']; ?></td></tr>
-<tr><td>Religion</td><td><?php echo $data['religion']; ?></td></tr>
-<tr><td>Community</td><td><?php echo $data['community']; ?></td></tr>
-<tr><td>Caste</td><td><?php echo $data['caste']; ?></td></tr>
-<tr><td>Nationality</td><td><?php echo $data['nationality']; ?></td></tr>
-<tr><td>Mother Tongue</td><td><?php echo $data['mother_tongue']; ?></td></tr>
-<tr><td>Employment Status</td><td><?php echo $data['employment_status']; ?></td></tr>
-<tr><td>Employment Type</td><td><?php echo $data['employment_type']; ?></td></tr>
-</table>
-</div>
+<h3> PERSONAL DETAILS</h3>
 
+<div style="display:flex; gap:30px; align-items:flex-start;">
+
+<!-- LEFT COLUMN -->
+<table class="details-table" style="width:50%;">
+<tr><td>Name</td><td><?php echo $data['name'] ?? '-'; ?></td></tr>
+<tr><td>Name (Tamil)</td><td><?php echo $data['name_tamil'] ?? '-'; ?></td></tr>
+<tr><td>DOB</td><td><?php echo $data['dob'] ?? '-'; ?></td></tr>
+<tr><td>Age</td><td><?php echo $data['age'] ?? '-'; ?></td></tr>
+<tr><td>Mobile</td><td><?php echo $data['mobile'] ?? '-'; ?></td></tr>
+<tr><td>Email</td><td><?php echo $data['email'] ?? '-'; ?></td></tr>
+<tr><td>Nationality</td><td><?php echo $data['nationality'] ?? '-'; ?></td></tr>
+<tr><td>Mother Tongue</td><td><?php echo $data['mother_tongue'] ?? '-'; ?></td></tr>
+</table>
+
+<!-- RIGHT COLUMN -->
+<table class="details-table" style="width:50%;">
+<tr><td>Father Name</td><td><?php echo $data['guardian_name'] ?? '-'; ?></td></tr>
+<tr><td>Mother Name</td><td><?php echo $data['mother_name'] ?? '-'; ?></td></tr>
+<tr><td>Aadhaar</td><td><?php echo $data['aadhaar'] ?? '-'; ?></td></tr>
+<tr><td>Religion</td><td><?php echo $data['religion'] ?? '-'; ?></td></tr>
+<tr><td>Community</td><td><?php echo $data['community'] ?? '-'; ?></td></tr>
+<tr><td>Caste</td><td><?php echo $data['caste'] ?? '-'; ?></td></tr>
+<tr><td>Employment Status</td>
+<td>
+<?php
+if(!empty($data['employment_status'])){
+    echo ucfirst($data['employment_status']);
+}else{
+    echo '-';
+}
+?>
+</td>
+</tr>
+
+<tr><td>Employment Details</td>
+<td>
+<?php echo $data['employment_type'] ?? '-'; ?>
+</td>
+</tr>
+</table>
+
+</div>
+</div>
 <!-- ADDRESS -->
 <div class="section">
-<h3>Address</h3>
+<h3> ADDRESS FOR COMMUNICATION</h3>
 <table class="details-table">
 <tr><td>Street</td><td><?php echo $data['street']; ?></td></tr>
 <tr><td>Town</td><td><?php echo $data['town']; ?></td></tr>
@@ -384,12 +444,76 @@ No Photo
 <tr><td>State</td><td><?php echo $data['state_name']; ?></td></tr>
 <tr><td>Pincode</td><td><?php echo $data['pincode']; ?></td></tr>
 <tr><td>Phone</td><td><?php echo $data['phone']; ?></td></tr>
+<tr>
+</td>
+</tr>
+</table>
+</div>
+<!-- ADDITIONAL INFORMATION -->
+<div class="section">
+<h3> ADDITIONAL INFORMATION</h3>
+
+<table class="details-table">
+
+<tr>
+<td>ABC Status</td>
+<td>
+<?php echo htmlspecialchars($data['abc_status'] ?? 'No'); ?>
+</td>
+</tr>
+
+<tr>
+<td>ABC ID</td>
+<td>
+<?php 
+if(!empty($data['abc_id'])){
+    echo chunk_split($data['abc_id'],4,' ');
+}else{
+    echo 'Not Available';
+}
+?>
+</td>
+</tr>
+
+<tr>
+<td>Undergoing Other Course</td>
+<td>
+<?php echo htmlspecialchars($data['other_course'] ?? 'No'); ?>
+</td>
+</tr>
+
+<tr>
+<td>Other Course Details</td>
+<td>
+<?php echo !empty($data['other_course_details']) 
+        ? htmlspecialchars($data['other_course_details']) 
+        : '-'; ?>
+</td>
+</tr>
+
+<tr>
+<td>Ward of Defence</td>
+<td>
+<?php
+if(!empty($data['defence_personnel'])){
+    echo "Defence Personnel";
+}
+elseif(!empty($data['ex_servicemen'])){
+    echo "Ex-Servicemen";
+}
+else{
+    echo "None";
+}
+?>
+</td>
+</tr>
+
 </table>
 </div>
 
 <!-- DOCUMENTS -->
 <div class="section">
-<h3>Uploaded Documents</h3>
+<h3> UPLOADED DOCUMENT</h3>
 
 <div class="doc-grid">
 <?php
@@ -442,10 +566,10 @@ echo '<a class="doc-btn" target="_blank" href="'.$baseURL.$appFolder.$data[$key]
 </div>
 <!-- APPROVAL -->
 <div class="approval-box">
-<h3>Approval Panel</h3>
+<h3>APPROVAL PANEL</h3>
 
 <form method="POST">
-<label>Staff Remark</label>
+<label>Incharge Remark</label>
 <textarea name="remark" rows="3" required></textarea>
 <br><br>
 <button type="submit" name="action" value="approve" class="btn approve">Approve</button>

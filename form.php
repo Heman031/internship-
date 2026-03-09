@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Distance Education Form</title>
+    <title>Distance Education </title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -102,7 +102,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </header>
 
 <div class="container">
-<h2>Distance Education Registration</h2>
+<h2>DISTANCE EDUCATION REGISTRATION
+
+</h2>
 
 <form method="post">
 <div class="sub">
@@ -157,7 +159,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </div>
 
 <div id="eligibilityBox" class="note">
-    Eligibility will appear here
+   Please Check The Eligibility Criteria For Candidates Before Applying 
+</div>
+<div class="form-container">
+   <!-- your form here -->
 </div>
 
 <input type="hidden" name="eligibility" id="eligibility">
@@ -170,6 +175,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <button type="submit" id="nextBtn" disabled>Next</button>
 </form>
 </div>
+
 
 <script src="script.js"></script>
 

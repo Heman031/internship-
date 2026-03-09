@@ -210,7 +210,8 @@ if ($course_type === "PG") {
     </nav>
   </div>
 </header>
-<!-- BANNER -->
+<!-- BANNER --> 
+ 
 <section class="banner">
  <main class="container">
     <header class="form-header">
@@ -223,7 +224,7 @@ if ($course_type === "PG") {
 <!-- ADDITIONAL DETAILS -->
 <!-- ===================== -->
 <fieldset>
-  <legend>Additional Information</legend>
+  <legend>ADDITIONAL INFORMATION</legend>
   <!-- Q9 -->
   <!-- ===================== -->
 <!-- Q24 OTHER COURSE -->
@@ -268,7 +269,7 @@ if ($course_type === "PG") {
 <!-- EXAMINATION DETAILS -->
 <!-- ===================== -->
 <fieldset>
-  <legend>26. Details of Examination Passed <span class="required-star">*</span></legend>
+  <legend>26. DETAILS OF EXAMINATION PASSED <span class="required-star">*</span></legend>
   <div class="table-wrapper">
   <table class="exam-table">
     <thead>
@@ -331,7 +332,7 @@ if ($course_type === "PG") {
 <!-- ABC ID -->
 <!-- ===================== -->
 <fieldset>
-  <legend>27. Academic Bank of Credit (ABC)</legend>
+  <legend>27. ACADEMIC BANK OF CREDIT (ABC)</legend>
   <div class="form-row">
     <label>Do you have Academic Bank of Credit (ABC ID)?</label>
     <div class="radio-group">
@@ -359,7 +360,7 @@ if ($course_type === "PG") {
 <!-- DOCUMENT UPLOAD -->
 <!-- ===================== -->
 <fieldset>
-  <legend>Document Upload (Max 2MB Each)</legend>
+  <legend>DOCUMENT UPLOAD (MAX 2MB EACH)</legend>
   <!-- SSLC -->
   <div class="upload-row">
     <label>SSLC Statement <span class="required-star">*</span></label>
@@ -401,7 +402,7 @@ if ($course_type === "PG") {
   </div>
 </fieldset>
 <fieldset>
-  <legend>28. Enclosures</legend>
+  <legend>28.ENCLOSURES</legend>
   <div class="form-row">
     <div class="inline">
       <label>
@@ -449,7 +450,7 @@ if ($course_type === "PG") {
 <!-- DECLARATION SECTION -->
 <!-- ===================== -->
 <fieldset>
-  <legend>Declaration</legend>
+  <legend> DECLARATION</legend>
   <p style="margin-bottom:15px; font-size:14px; line-height:1.6;">
     <input type="checkbox" id="declaration" name="declaration" value="1" required>
     I hereby declare that all the particulars given above are correct and 
@@ -469,7 +470,7 @@ if ($course_type === "PG") {
    </div> 
 </fieldset>
       <div class="actions">
-        <button type="submit" class="btn btn-outline">NEXT</button>
+        <button type="submit" class="btn btn-outline">SUBMIT</button>
         <button type="reset" class="secondary">RESET</button>
         <button type="submit" name="back" value="1" class="btn btn-outline">  BACK
         </button>

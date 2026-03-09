@@ -8,7 +8,7 @@ function loadCourses(programme) {
         .then(data => {
             document.getElementById("course").innerHTML = data;
             document.getElementById("eligibilityBox").innerHTML =
-                "Eligibility will appear here";
+                " Please Check The Eligibility Criteria For Candidates Before Applying ";
             document.getElementById("nextBtn").disabled = true;
         });
 }
@@ -32,3 +32,4 @@ function loadEligibility(selectEl) {
             document.getElementById("nextBtn").disabled = false;
         });
 }
+

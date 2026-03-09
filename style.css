@@ -13,6 +13,9 @@
     justify-content: space-between;
 }
 
+h2 {
+    text-align: center;
+}
 .logo {
     display: flex;
     margin-right: 15px;
@@ -61,10 +64,10 @@ body {
 
 /* Main container */
 .container {
-    width: 500px;
+    width: 650px;
     margin: 40px auto;
     background: #fdfcfa;
-    padding: 20px;
+    padding: 50px;
     border-radius: 8px;
     box-shadow: 0 0 12px rgba(0,0,0,0.15);
 }
@@ -110,10 +113,11 @@ button:hover {
 /* Info box */
 .note {
     margin-top: 10px;
-    padding: 10px;
+    padding: 35px;
     background: #eef3ff;
-    font-size: 14px;
+    font-size: 15px;
     border-radius: 4px;
+    text-align: center;
 }
 
 /* FOOTER */
@@ -197,3 +201,20 @@ footer {
     }
 }
 
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group input,
+.form-group select {
+    height: 38px;
+    padding: 6px 10px;
+}

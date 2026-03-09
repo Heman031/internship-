@@ -14,17 +14,96 @@ $data = $stmt->get_result()->fetch_assoc();
 <html>
 <head>
 <title>Print Application</title>
+
 <style>
-body{ font-family:Arial; }
-h2{ text-align:center; }
-table{ width:100%; border-collapse:collapse; }
-td{ padding:8px; border-bottom:1px solid #ddd; }
-.label{ width:30%; font-weight:bold; }
+
+body{
+font-family:Arial;
+margin:0;
+}
+
+/* UNIVERSITY HEADER */
+
+.uni-header{
+display:flex;
+align-items:center;
+color: black;
+padding:12px 20px;
+}
+
+.uni-logo{
+width:90px;
+margin-right:15px;
+}
+
+.uni-title{
+line-height:1.4;
+}
+
+.tamil-title{
+font-size:20px;
+font-weight:bold;
+}
+
+.eng-title{
+font-size:22px;
+font-weight:bold;
+}
+
+/* PAGE TITLE */
+
+h2{
+text-align:center;
+margin:20px 0;
+}
+
+/* TABLE STYLE */
+
+table{
+width:90%;
+margin:auto;
+border-collapse:collapse;
+}
+
+td{
+padding:8px;
+border-bottom:1px solid #ddd;
+}
+
+.label{
+width:30%;
+font-weight:bold;
+}
+
 </style>
+
 </head>
+
 <body onload="window.print()">
 
+<!-- UNIVERSITY HEADER -->
+
+<div class="uni-header">
+
+<img src="../../image/Univ.png" class="uni-logo">
+
+<div class="uni-title">
+    <div class="eng-title">
+University of Madras – Institute of Distance Education
+</div>
+
+<div class="tamil-title">
+சென்னை பல்கலைக்கழகம் – தொலைதூரக் கல்வி நிறுவனம்
+</div>
+
+
+</div>
+
+</div>
+
+
 <h2>Distance Education - Approved Application</h2>
+
 
 <table>
 

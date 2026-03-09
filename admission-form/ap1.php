@@ -185,7 +185,7 @@ if ($_POST['course_type'] !== "UG") {
     <form method="POST" enctype="multipart/form-data">
     <!-- PROGRAMME DETAILS -->
     <fieldset class="programme-fieldset">
-    <legend>Programme Details</legend>
+    <legend>PROGRAMME DETAILS</legend>
     <div class="programme-content-wrapper">
     <div class="programme-left">
     <div class="form-row">
@@ -216,6 +216,19 @@ if ($_POST['course_type'] !== "UG") {
     <option value="CERT">Certificate</option>
     </select>
     </div>
+    <div class="form-group">
+    <label><b>Medium of Study</b></label><br>
+
+    <label>
+        <input type="radio" name="medium" value="tamil" required>
+        Tamil 
+    </label>
+
+    <label style="margin-left:20px;">
+        <input type="radio" name="medium" value="english" required>
+        English 
+    </label>
+</div>
     <div class="form-grid">
     <div class="form-row">
 <label>Name of the Programme</label>
@@ -231,29 +244,36 @@ if ($_POST['course_type'] !== "UG") {
 </div>
 </div>
     <div class="form-row">
-    <label>Medium</label>
-    <div class="radio-group">
-    <label class="radio-item"><input type="radio" name="medium" value="Tamil">Tamil</label>
-    <label class="radio-item"><input type="radio" name="medium" value="English">English</label>
-    </div>
-    </div>
-    <div class="form-row">
-    <label>Specially Challenged Status<span class="required-star">*</span></label><br>
-    <div class="inline">
-      <label class="radio-item">
-        <input type="checkbox"> Differently Abled
-      </label>
-      <label class="radio-item">
-        <input type="checkbox"> Visually Challenged
-      </label>
-      <label class="radio-item">
-        <input type="checkbox"> Prisoner
-      </label>
-      <label class="radio-item">
-        <input type="checkbox">None
-      </label>
-    </div>
+  <label>Specially Challenged Status <span class="required-star">*</span></label><br>
+
+  <div class="inline">
+    <label class="radio-item">
+      <input type="checkbox" name="special_status[]" value="Differently Abled" onchange="toggleSpecialFile()">
+      Differently Abled
+    </label>
+
+    <label class="radio-item">
+      <input type="checkbox" name="special_status[]" value="Visually Challenged" onchange="toggleSpecialFile()">
+      Visually Challenged
+    </label>
+
+    <label class="radio-item">
+      <input type="checkbox" name="special_status[]" value="Prisoner" onchange="toggleSpecialFile()">
+      Prisoner
+    </label>
+
+    <label class="radio-item">
+      <input type="checkbox" name="special_status[]" value="None" onchange="toggleSpecialFile()">
+      None
+    </label>
   </div>
+
+  <!-- File Upload -->
+  <div id="specialFileBox" style="margin-top:10px; display:none;">
+    <label>Upload Supporting Certificate (PDF/JPG/PNG)</label>
+    <input type="file" name="special_file" accept=".pdf,.jpg,.jpeg,.png">
+  </div>
+</div>
     </div>
     <div class="photo-box">
     <label><strong>Recent Passport Photo</strong></label>
@@ -267,7 +287,7 @@ if ($_POST['course_type'] !== "UG") {
     </fieldset>
     <!-- ADDRESS FOR COMMUNICATION -->
     <fieldset>
-    <legend>Address for Communication</legend>
+    <legend>ADDRESS FOR COMMUNICATION</legend>
     <div class="form-grid">
     <div class="form-row">
     <label>Name *</label>
@@ -321,20 +341,21 @@ if ($_POST['course_type'] !== "UG") {
     </fieldset>
     <!-- APPLICANT DETAILS -->
     <fieldset>
-    <legend>Applicant Details</legend>
+    <legend>APPLICANT DETAILS</legend>
     <div class="form-grid">
     <div class="form-row">
-    <label>Name (English in CAPITAL LETTERS) *</label>
+    <label>1.(a)Name (English in CAPITAL LETTERS) *</label>
     <input type="text" name="name_english" id="name_english" required>
     </div>
     <div class="form-row">
-    <label>Name (Tamil) *</label>
+    <label> (b)Name (Tamil) *</label>
     <input type="text" name="name_tamil" id="name_tamil" required>
     </div>
     </div>
+    
     <div class="form-grid">
     <div class="form-row">
-    <label>Date of Birth *</label>
+    <label>Date of Birth as Per T.C *</label>
     <input type="date" name="dob" required max="<?php echo date('Y-m-d', strtotime('-17 years')); ?>">
     </div>
     <div class="form-row">
@@ -342,7 +363,7 @@ if ($_POST['course_type'] !== "UG") {
     <input type="text" name="age" readonly>
     </div>
     <div class="form-row">
-    <label>Medium</label>
+    <label>Gender</label>
     <div class="radio-group">
     <label class="radio-item"><input type="radio" name="gender" value="Male">Male</label>
     <label class="radio-item"><input type="radio" name="gender" value="Female">Female</label>
@@ -352,7 +373,7 @@ if ($_POST['course_type'] !== "UG") {
    </div>
    <div class="form-grid">
     <div class="form-row">
-    <label>Father's / Guardian Name *</label>
+    <label>2.Father's / Guardian Name *</label>
     <input type="text" name="guardian_name" required>
     </div>
     <div class="form-row">
@@ -450,10 +471,10 @@ if ($_POST['course_type'] !== "UG") {
     </div>
   </div>
   
-    <div class="actions">
-    <button type="submit">NEXT</button>
-    <button type="reset">RESET</button>
-    </div>
+   <div class="form-buttons">
+    <button type="submit" class="save-btn">Save and Continue</button>
+    <button type="reset" class="reset-btn">Reset</button>
+</div>
     </form>
     </div>
     </section>
@@ -690,6 +711,24 @@ document.addEventListener("DOMContentLoaded", toggleFoundation);
 document.getElementById("name_english").addEventListener("input", function() {
     document.getElementById("name_tamil").value = this.value;
 });
+
+</script>
+<script>
+function toggleSpecialFile() {
+
+  const checkboxes = document.querySelectorAll('input[name="special_status[]"]');
+  const fileBox = document.getElementById("specialFileBox");
+
+  let show = false;
+
+  checkboxes.forEach(cb => {
+    if (cb.checked && cb.value !== "None") {
+      show = true;
+    }
+  });
+
+  fileBox.style.display = show ? "block" : "none";
+}
 </script>
     </body>
     </html>

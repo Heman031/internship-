@@ -111,9 +111,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 /* LOGIN BOX */
 .white-wrapper {
-    width: 520px;
+    width: 500px;
     background: #ffffff;
-    border-radius: 8px;
+    border-radius: 6px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.25);
     overflow: hidden;
 }
@@ -121,11 +121,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 /* TITLE BAR */
 .uni-title {
     background: linear-gradient( #1c8aea);
-    color: #ffffff;
+    color: #f8f3f3;
     text-align: center;
     font-size: 26px;
     font-weight: bold;
-    padding: 14px;
+    padding: 8px;
 }
 
 /* CONTENT */
@@ -241,7 +241,7 @@ footer {
 <div class="banner">
     <div class="white-wrapper">
 
-        <div class="uni-title">University of Madras</div>
+        <div class="uni-title"> UNIVERSITY OF MADRAS</div>
 
         <div class="login-content">
 

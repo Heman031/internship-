@@ -130,6 +130,7 @@ function toggleSelectAll(source) {
 </script>
 </head>
 <body>
+    
 
 <div class="sidebar">
 <h2>Distance Education</h2>
@@ -142,7 +143,7 @@ function toggleSelectAll(source) {
 
 <div class="main">
 
-<h1>Application Processing Admin</h1>
+<h1>Admission Application Details</h1>
 <p>Total Records: <strong><?php echo $totalRows; ?></strong></p>
 
 <div class="card white">
