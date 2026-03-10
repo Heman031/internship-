@@ -217,6 +217,7 @@ body{
             <a href="../index.php">Home</a>
             <a href="#">About</a>
             <a href="#">Contact</a>
+            <a href="staff/staff_login.php">Staff Login</a>
         </nav>
 
     </div>
