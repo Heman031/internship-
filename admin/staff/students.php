@@ -7,7 +7,7 @@ if(!isset($_SESSION['staff'])){
     exit();
 }
 
-$type = $_SESSION['course_type'];
+$type = $_SESSION['department'];
 $search = $_GET['search'] ?? '';
 
 if(!empty($search)){

@@ -544,3 +544,240 @@ font-weight:bold;
 font-size:22px;
 font-weight:bold;
 }
+
+
+
+
+
+
+/* ===============================
+   CREATE STAFF PAGE STYLE
+================================= */
+
+.create-staff-page{
+    display:flex;
+    justify-content:flex-start;
+}
+
+.staff-form-card{
+    background:#ffffff;
+    padding:30px;
+    width:420px;
+    border-radius:10px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    margin-top:10px;
+}
+
+.staff-form-group{
+    display:flex;
+    flex-direction:column;
+    margin-bottom:18px;
+}
+
+.staff-form-group label{
+    font-weight:600;
+    margin-bottom:6px;
+}
+
+.staff-form-group input,
+.staff-form-group select{
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:6px;
+    font-size:14px;
+    transition:0.3s;
+}
+
+.staff-form-group input:focus,
+.staff-form-group select:focus{
+    border-color:#2563eb;
+    outline:none;
+}
+
+/* Create button */
+
+.staff-btn{
+    background:#2563eb;
+    color:white;
+    padding:10px 20px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.staff-btn:hover{
+    background:#1e40af;
+}
+
+/* Link button */
+
+.staff-link-btn{
+    display:inline-block;
+    margin-top:10px;
+    text-decoration:none;
+    color:#2563eb;
+    font-weight:600;
+}
+
+.staff-link-btn:hover{
+    text-decoration:underline;
+}
+
+
+
+/* ===============================
+   MANAGE STAFF PAGE STYLE
+================================= */
+
+.manage-staff-page{
+    padding-top:10px;
+}
+
+/* Card container */
+
+.manage-staff-card{
+    background:#fff;
+    padding:25px;
+    border-radius:10px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.08);
+    margin-top:10px;
+}
+
+/* Create button */
+
+.staff-create-btn{
+    display:inline-block;
+    background:#2563eb;
+    color:#fff;
+    padding:8px 16px;
+    text-decoration:none;
+    border-radius:6px;
+    margin-bottom:15px;
+    font-weight:500;
+}
+
+.staff-create-btn:hover{
+    background:#1e40af;
+}
+
+/* Staff table */
+
+.staff-table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px;
+}
+
+/* Table header */
+
+.staff-table th{
+    background:#1e293b;
+    color:white;
+    padding:12px;
+    text-align:left;
+    font-weight:500;
+}
+
+/* Table cells */
+
+.staff-table td{
+    padding:12px;
+    border-bottom:1px solid #e5e7eb;
+}
+
+/* Row hover */
+
+.staff-table tr:hover{
+    background:#f8fafc;
+}
+
+/* Action buttons */
+
+.staff-table .btn{
+    padding:6px 12px;
+    border-radius:6px;
+    text-decoration:none;
+    font-size:13px;
+    margin-right:6px;
+}
+
+.staff-table .btn{
+    background:#2563eb;
+    color:white;
+}
+
+.staff-table .btn:hover{
+    background:#1e40af;
+}
+
+.staff-table .btn.red{
+    background:#dc2626;
+}
+
+.staff-table .btn.red:hover{
+    background:#b91c1c;
+}
+
+/* ===============================
+   EDIT STAFF PAGE STYLE
+================================= */
+
+.edit-staff-page{
+    padding-top:10px;
+}
+
+/* Card container */
+
+.edit-staff-card{
+    background:#ffffff;
+    padding:30px;
+    width:420px;
+    border-radius:10px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.08);
+    margin-top:10px;
+}
+
+/* Form groups */
+
+.edit-form-group{
+    display:flex;
+    flex-direction:column;
+    margin-bottom:18px;
+}
+
+.edit-form-group label{
+    font-weight:600;
+    margin-bottom:6px;
+}
+
+.edit-form-group input,
+.edit-form-group select{
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:6px;
+    font-size:14px;
+    transition:0.3s;
+}
+
+.edit-form-group input:focus,
+.edit-form-group select:focus{
+    border-color:#2563eb;
+    outline:none;
+}
+
+/* Update button */
+
+.edit-staff-btn{
+    background:#2563eb;
+    color:white;
+    padding:10px 20px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.edit-staff-btn:hover{
+    background:#1e40af;
+}

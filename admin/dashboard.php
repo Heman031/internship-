@@ -47,9 +47,12 @@ $cert= $conn->query("SELECT COUNT(*) c FROM records WHERE course_type='CERT'")->
 
 <div class="sidebar">
 <h2>Admin Panel</h2>
+
 <a href="dashboard.php">Dashboard</a>
 <a href="admission/list.php">Applications</a>
+<a href="staff_management.php">Staff Management</a>
 <a href="logout.php">Logout</a>
+
 </div>
 
 <div class="main">

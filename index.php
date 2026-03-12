@@ -63,12 +63,126 @@ color:white;
 border:none;
 cursor:pointer;
 }
+/* RULES POPUP */
+
+#rulesPopup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:9999;
+}
+
+/* POPUP CARD */
+
+.rules-box{
+background:#fff;
+width:520px;
+border-radius:8px;
+box-shadow:0 8px 25px rgba(0,0,0,0.4);
+animation:popupAnim 0.4s ease;
+font-family:Arial;
+}
+
+/* HEADER */
+
+.rules-header{
+background:#0a6ea8;
+color:white;
+padding:12px;
+font-size:18px;
+border-radius:8px 8px 0 0;
+text-align:center;
+}
+
+/* BODY */
+
+.rules-body{
+padding:20px;
+max-height:260px;
+overflow-y:auto;
+line-height:1.6;
+}
+
+/* FOOTER */
+
+.rules-footer{
+padding:15px;
+text-align:right;
+border-top:1px solid #ddd;
+}
+
+/* BUTTON */
+
+.rules-btn{
+background:#0a6ea8;
+color:white;
+border:none;
+padding:8px 20px;
+border-radius:4px;
+cursor:pointer;
+}
+
+/* ANIMATION */
+
+@keyframes popupAnim{
+from{
+transform:scale(0.7);
+opacity:0;
+}
+to{
+transform:scale(1);
+opacity:1;
+}
+}
 
 </style>
+<script>
+function closeRules(){
+document.getElementById("rulesPopup").style.display="none";
+}
+</script>
 
 </head>
 <body>
+<!-- RULES POPUP -->
 
+<div id="rulesPopup">
+
+<div class="rules-box">
+
+<div class="rules-header">
+Application Rules & Regulations
+</div>
+
+<div class="rules-body">
+
+<p>1. Applicants must provide correct personal details.</p>
+<p>2. Upload valid and clear documents only.</p>
+<p>3. Incomplete applications will not be processed.</p>
+<p>4. Application fees once paid will not be refunded.</p>
+
+<b>Application Procedure</b>
+
+<p>Step 1: Register your account.</p>
+<p>Step 2: Login to the portal.</p>
+<p>Step 3: Fill the application form.</p>
+<p>Step 4: Upload required documents.</p>
+<p>Step 5: Submit the application.</p>
+
+</div>
+
+<div class="rules-footer">
+<button class="rules-btn" onclick="closeRules()">Read & Continue</button>
+</div>
+
+</div>
+</div>
 <!-- HEADER -->
 <header class="top-header">
 <div class="container">

@@ -523,7 +523,8 @@ $files = [
 'ug_file'=>'UG',
 'tc_file'=>'Transfer Certificate',
 'migration_file'=>'Migration Certificate',
-'undertaking_file'=>'Undertaking'
+'undertaking_file'=>'Undertaking',
+'disability_certificate'=>'Differently Abled Certificate'
 ];
 
 foreach($files as $key=>$label){

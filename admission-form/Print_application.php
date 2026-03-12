@@ -519,6 +519,7 @@ $declarationChecked = "☑";
     <div style="text-align:right;">
         <div style="margin-top:40px;">
     <strong>Signature of Applicant</strong>
+    <img src="../../uploads/<?php echo $data['application_no']; ?>/<?php echo $data['signature_file']; ?>" width="120">
         </div>
     </div>
 

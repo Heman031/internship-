@@ -75,24 +75,34 @@ if ($course_type === "PG") {
     if (!is_dir($uploadDir)) {
         mkdir($uploadDir, 0777, true);
     }
-    $docFields = ['sslc','hsc','ug','tc','migration','undertaking'];
-    $allowedExt = ['pdf','jpg','jpeg','png'];
-    $files = [];
-    foreach ($docFields as $field) {
-        if (!empty($_FILES[$field]['name'])) {
-            $ext = strtolower(pathinfo($_FILES[$field]['name'], PATHINFO_EXTENSION));
-            if (!in_array($ext, $allowedExt)) {
-                die("Invalid file type for $field");
-            }
-            if ($_FILES[$field]['size'] > 2 * 1024 * 1024) {
-                die(strtoupper($field) . " exceeds 2MB");
-            }
-            $newFile = strtoupper($field) . "-" . $appNo . "." . $ext;
-            if (move_uploaded_file($_FILES[$field]['tmp_name'], $uploadDir . $newFile)) {
-                $files[$field] = $newFile;
-            }
+ $docFields = ['sslc','hsc','ug','tc','migration','undertaking','signature'];
+$allowedExt = ['pdf','jpg','jpeg','png'];
+$files = [];
+
+foreach ($docFields as $field) {
+
+    if (isset($_FILES[$field]) && $_FILES[$field]['error'] == 0) {
+
+        $ext = strtolower(pathinfo($_FILES[$field]['name'], PATHINFO_EXTENSION));
+
+        if (!in_array($ext, $allowedExt)) {
+            die("Invalid file type for " . strtoupper($field));
         }
+
+        if ($_FILES[$field]['size'] > 2 * 1024 * 1024) {
+            die(strtoupper($field) . " exceeds 2MB");
+        }
+
+        $newFile = strtoupper($field) . "-" . $appNo . "." . $ext;
+
+        if (move_uploaded_file($_FILES[$field]['tmp_name'], $uploadDir . $newFile)) {
+            $files[$field] = $newFile;
+        }
+
+    } else {
+        $files[$field] = null;
     }
+}
     $enclosures = isset($_POST['enclosures'])
         ? implode(",", $_POST['enclosures'])
         : null;
@@ -133,6 +143,7 @@ if ($course_type === "PG") {
         tc_file = :tc_file,
         migration_file = :migration_file,
         undertaking_file = :undertaking_file,
+        signature_file = :signature_file,
         enclosures = :enclosures
         WHERE application_no = :application_no";
     $stmt = $pdo->prepare($sql);
@@ -173,6 +184,7 @@ if ($course_type === "PG") {
         ':tc_file' => $files['tc'] ?? null,
         ':migration_file' => $files['migration'] ?? null,
         ':undertaking_file' => $files['undertaking'] ?? null,
+        ':signature_file' => $files['signature'] ?? null,
         ':enclosures' => $enclosures,
         ':application_no' => $appNo
     ]);
@@ -254,10 +266,10 @@ if ($course_type === "PG") {
     <label>25. Ward of Defence Personnel / Ex-Servicemen <span class="required-star">*</span></label>
     <div class="inline">
       <label class="radio-item">
-        <input type="checkbox"> Ward of Defence Service Personnel
+        <input type="checkbox" name="defence_personnel" value="1">
       </label>
       <label class="radio-item">
-        <input type="checkbox"> Ward of Ex-Servicemen (Navy / Army / Air Force)
+        <input type="checkbox" name="ex_servicemen" value="1">
       </label>
       <label class="radio-item">
         <input type="checkbox">None
@@ -465,8 +477,17 @@ if ($course_type === "PG") {
       <label>Date :</label>
     </div> <br><br><br>
   <div class="sign">
-    <label><strong>Signature of the Applicant</strong></label>
-  </div>
+<label><strong>Signature of the Applicant</strong></label><br><br>
+
+<input type="file"
+       name="signature"
+       id="file_signature"
+       accept=".jpg,.jpeg,.png"
+       required>
+
+<div class="error-text" id="error_signature"></div>
+
+</div>
    </div> 
 </fieldset>
       <div class="actions">

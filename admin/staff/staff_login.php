@@ -13,17 +13,21 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $error = "Please enter username and password.";
     } else {
 
-        $stmt = $conn->prepare("SELECT * FROM staff WHERE username=?");
+        $stmt = $conn->prepare("SELECT * FROM staff_users WHERE username=?");
         $stmt->bind_param("s", $username);
         $stmt->execute();
-        $staff = $stmt->get_result()->fetch_assoc();
 
-        if($staff && $password == $staff['password']){
+        $result = $stmt->get_result();
+        $staff = $result->fetch_assoc();
+
+        if($staff && password_verify($password, $staff['password'])){
+
             $_SESSION['staff'] = $staff['username'];
-            $_SESSION['course_type'] = $staff['course_type'];
+            $_SESSION['department'] = $staff['department'];
 
             header("Location: students.php");
             exit();
+
         } else {
             $error = "Invalid login credentials.";
         }

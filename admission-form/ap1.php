@@ -56,38 +56,60 @@ if ($lastRecord) {
 /* 5 digit formatting */
 $formattedNumber = str_pad($newNumber, 5, "0", STR_PAD_LEFT);
 $application_no = $prefix . "-" . $year . "-" . $formattedNumber;
-/* ===== PHOTO UPLOAD (SAVE AS APPLICATION NUMBER) ===== */
+/* ===== PHOTO UPLOAD ===== */
 
 $photoName = null;
 
 if (!empty($_FILES['photo']['name'])) {
 
     $allowed = ['jpg','jpeg','png'];
-    $ext = strtolower(pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION));
+    $photoExt = strtolower(pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION));
 
-    if (!in_array($ext, $allowed)) {
-        die("Invalid photo format. Only JPG, JPEG, PNG allowed.");
+    if (!in_array($photoExt, $allowed)) {
+        die("Invalid photo format.");
     }
 
     if ($_FILES['photo']['size'] > 2 * 1024 * 1024) {
         die("Photo size must be below 2MB.");
     }
 
-    // Create folder like uploads/UGA-2026-00001/
     $uploadDir = "uploads/" . $application_no . "/";
 
     if (!is_dir($uploadDir)) {
         mkdir($uploadDir, 0777, true);
     }
 
-    // Final filename: UGA-2026-00001.jpg
-    $photoName = $application_no . "." . $ext;
+    $photoName = $application_no . "." . $photoExt;
 
-    $destination = $uploadDir . $photoName;
+    move_uploaded_file(
+        $_FILES['photo']['tmp_name'],
+        $uploadDir . $photoName
+    );
+}
 
-    if (!move_uploaded_file($_FILES['photo']['tmp_name'], $destination)) {
-        die("Failed to upload photo.");
+
+/* ===== DIFFERENTLY ABLED CERTIFICATE ===== */
+
+$disability_certificate = null;
+
+if (!empty($_POST['special_status']) && !empty($_FILES['special_file']['name'])) {
+
+    $uploadDir = "uploads/" . $application_no . "/";
+
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0777, true);
     }
+
+    $certExt = strtolower(pathinfo($_FILES['special_file']['name'], PATHINFO_EXTENSION));
+
+    $specialFileName = "DIFFERENTLYABLED-" . $application_no . "." . $certExt;
+
+    move_uploaded_file(
+        $_FILES['special_file']['tmp_name'],
+        $uploadDir . $specialFileName
+    );
+
+    $disability_certificate = $specialFileName;
 }
 /* ===== FOUNDATION LANGUAGE SAFETY ===== */
 if ($_POST['course_type'] !== "UG") {
@@ -95,24 +117,26 @@ if ($_POST['course_type'] !== "UG") {
 }
     /* ===== INSERT USING PDO ===== */
     $sql = "INSERT INTO records (
-        application_no, course_type, foundation_lang, programme_name,
-        main_subject, medium,differently_abled, photo,
-        name, street, town, state, district, pincode,
-        phone, mobile,
-        name_english, name_tamil, email, dob, age,
-        guardian_name, mother_name, aadhaar, nationality,
-        religion, mother_tongue, blood_group, community, caste,
-        employment_status, employment_type
-    ) VALUES (
-        :application_no, :course_type, :foundation_lang, :programme_name,
-        :main_subject, :medium, :differently_abled, :photo,
-        :name, :street, :town, :state, :district, :pincode,
-        :phone, :mobile,
-        :name_english, :name_tamil, :email, :dob, :age,
-        :guardian_name, :mother_name, :aadhaar, :nationality,
-        :religion, :mother_tongue, :blood_group, :community, :caste,
-        :employment_status, :employment_type
-    )";
+    application_no, course_type, foundation_lang, programme_name,
+    main_subject, medium, differently_abled, photo,
+    disability_certificate,
+    name, street, town, state, district, pincode,
+    phone, mobile,
+    name_english, name_tamil, email, dob, age,
+    guardian_name, mother_name, aadhaar, nationality,
+    religion, mother_tongue, blood_group, community, caste,
+    employment_status, employment_type
+) VALUES (
+    :application_no, :course_type, :foundation_lang, :programme_name,
+    :main_subject, :medium, :differently_abled, :photo,
+    :disability_certificate,
+    :name, :street, :town, :state, :district, :pincode,
+    :phone, :mobile,
+    :name_english, :name_tamil, :email, :dob, :age,
+    :guardian_name, :mother_name, :aadhaar, :nationality,
+    :religion, :mother_tongue, :blood_group, :community, :caste,
+    :employment_status, :employment_type
+)";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
         ':application_no' => $application_no,
@@ -121,8 +145,9 @@ if ($_POST['course_type'] !== "UG") {
         ':programme_name' => $_POST['programme_name'],
         ':main_subject' => $_POST['main_subject'],
         ':medium' => $_POST['medium'],
-        ':differently_abled' => $_POST['differently_abled'],
+        ':differently_abled' => $differently_abled,
         ':photo' => $photoName,
+        ':disability_certificate' => $disability_certificate,
         ':name' => $_POST['name'],
         ':street' => $_POST['street'],
         ':town' => $_POST['town'],
@@ -717,17 +742,36 @@ document.getElementById("name_english").addEventListener("input", function() {
 function toggleSpecialFile() {
 
   const checkboxes = document.querySelectorAll('input[name="special_status[]"]');
+  const noneBox = document.querySelector('input[value="None"]');
   const fileBox = document.getElementById("specialFileBox");
 
-  let show = false;
+  let showFile = false;
 
   checkboxes.forEach(cb => {
-    if (cb.checked && cb.value !== "None") {
-      show = true;
+
+    if (cb.value === "None" && cb.checked) {
+
+      // Uncheck all others
+      checkboxes.forEach(c => {
+        if (c.value !== "None") {
+          c.checked = false;
+        }
+      });
+
+      showFile = false;
+
+    } else if (cb.value !== "None" && cb.checked) {
+
+      // Uncheck None
+      noneBox.checked = false;
+      showFile = true;
+
     }
+
   });
 
-  fileBox.style.display = show ? "block" : "none";
+  fileBox.style.display = showFile ? "block" : "none";
+
 }
 </script>
     </body>

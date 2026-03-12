@@ -8,169 +8,286 @@ $stmt = $conn->prepare("SELECT * FROM records WHERE id=?");
 $stmt->bind_param("i",$id);
 $stmt->execute();
 $data = $stmt->get_result()->fetch_assoc();
+
+$date = date("d-m-Y", strtotime($data['processed_at'] ?? 'now'));
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-<title>Print Application</title>
+<meta charset="UTF-8">
+<title>Provisional Admission Intimation</title>
 
 <style>
-
 body{
-font-family:Arial;
-margin:0;
+    font-family:"Times New Roman", serif;
+    margin:0;
 }
 
-/* UNIVERSITY HEADER */
-
-.uni-header{
-display:flex;
-align-items:center;
-color: black;
-padding:12px 20px;
+/* PAGE LAYOUT */
+.sheet{
+    width:900px;
+    margin:10px auto;
 }
 
-.uni-logo{
-width:90px;
-margin-right:15px;
+/* COPY BOX */
+.copy-box{
+    border:3px solid #4a6ea9;
+    border-radius:20px;
+    padding:20px;
+    margin-bottom:30px;
+}
+
+/* HEADER */
+.header{
+    text-align:center;
+    position:relative;
+}
+
+.logo{
+    position:absolute;
+    left:0;
+    top:0;
+    width:100px;
 }
 
 .uni-title{
-line-height:1.4;
+    font-size:22px;
+    font-weight:bold;
+    letter-spacing:1px;
 }
 
-.tamil-title{
-font-size:20px;
-font-weight:bold;
+.ide{
+    font-size:16px;
 }
 
-.eng-title{
-font-size:22px;
-font-weight:bold;
+.addr{
+    font-size:14px;
 }
 
-/* PAGE TITLE */
-
-h2{
-text-align:center;
-margin:20px 0;
+.title{
+    margin-top:10px;
+    font-weight:bold;
+    font-size:18px;
+    letter-spacing:1px;
 }
 
-/* TABLE STYLE */
+.copy-label{
+    position:absolute;
+    right:0;
+    top:40px;
+    background:#4a6ea9;
+    color:white;
+    padding:5px 12px;
+    border-radius:15px;
+    font-size:12px;
+}
+
+/* DETAILS TABLE */
 
 table{
-width:90%;
-margin:auto;
-border-collapse:collapse;
+    width:100%;
+    margin-top:20px;
+    border-collapse:collapse;
 }
 
 td{
-padding:8px;
-border-bottom:1px solid #ddd;
+    padding:6px;
+    font-size:15px;
 }
 
 .label{
-width:30%;
-font-weight:bold;
+    width:35%;
 }
 
-</style>
+/* SIGNATURE */
 
+.sign-row{
+    margin-top:40px;
+    display:flex;
+    justify-content:space-between;
+    text-align:center;
+}
+
+.sign{
+    width:30%;
+}
+
+/* PRINT */
+@media print {
+
+body{
+margin:0;
+}
+
+.sheet{
+margin:0 auto;
+}
+
+}
+</style>
 </head>
 
 <body onload="window.print()">
 
-<!-- UNIVERSITY HEADER -->
+<div class="sheet">
 
-<div class="uni-header">
+<!-- OFFICE COPY -->
 
-<img src="../../image/Univ.png" class="uni-logo">
+<div class="copy-box">
 
-<div class="uni-title">
-    <div class="eng-title">
-University of Madras – Institute of Distance Education
+<div class="header">
+
+<img src="../../image/Univ.png" class="logo">
+
+<div class="uni-title">UNIVERSITY OF MADRAS</div>
+<div class="ide">INSTITUTE OF DISTANCE EDUCATION</div>
+<div class="addr">CHEPAUK, CHENNAI - 600 005</div>
+<div class="addr">Phone : 25613708, E-Mail: ide.director@gmail.com</div>
+
+<div class="title">PROVISIONAL ADMISSION INTIMATION</div>
+
+<div class="copy-label">OFFICE COPY</div>
+
 </div>
-
-<div class="tamil-title">
-சென்னை பல்கலைக்கழகம் – தொலைதூரக் கல்வி நிறுவனம்
-</div>
-
-
-</div>
-
-</div>
-
-
-<h2>Distance Education - Approved Application</h2>
-
 
 <table>
 
 <tr>
-<td class="label">Application ID</td>
-<td><?php echo htmlspecialchars($data['application_no']); ?></td>
+<td class="label">Programme</td>
+<td>: <?php echo htmlspecialchars($data['programme_name']); ?></td>
+<td>Date : <?php echo $date; ?></td>
 </tr>
-
-<?php if(!empty($data['enrollment_no'])): ?>
-<tr>
-<td class="label">Enrollment Number</td>
-<td><?php echo htmlspecialchars($data['enrollment_no']); ?></td>
-</tr>
-<?php endif; ?>
-
 
 <tr>
 <td class="label">Name</td>
-<td><?php echo htmlspecialchars($data['name']); ?></td>
+<td colspan="2">: <?php echo htmlspecialchars($data['name']); ?></td>
 </tr>
 
 <tr>
-<td class="label">Course Type</td>
-<td><?php echo htmlspecialchars($data['course_type']); ?></td>
+<td class="label">Enrolment Number</td>
+<td colspan="2">: <?php echo htmlspecialchars($data['enrollment_no'] ?? ''); ?></td>
 </tr>
 
 <tr>
-<td class="label">Programme</td>
-<td><?php echo htmlspecialchars($data['programme_name']); ?></td>
+<td class="label">Year of Admission</td>
+<td colspan="2">: <?php echo date("Y"); ?></td>
 </tr>
 
 <tr>
-<td class="label">Main Subject</td>
-<td><?php echo htmlspecialchars($data['main_subject']); ?></td>
+<td class="label">Fees to be paid (in Rupees)</td>
+<td colspan="2">: </td>
 </tr>
 
 <tr>
-<td class="label">Foundation Language</td>
-<td><?php echo htmlspecialchars($data['foundation_lang']); ?></td>
+<td class="label">Original Certificates returned herewith</td>
+<td colspan="2">: </td>
 </tr>
 
 <tr>
 <td class="label">Medium</td>
-<td><?php echo htmlspecialchars($data['medium']); ?></td>
-</tr>
-
-<tr>
-<td class="label">Status</td>
-<td><?php echo htmlspecialchars($data['status']); ?></td>
-</tr>
-
-<tr>
-<td class="label">Processed By</td>
-<td><?php echo htmlspecialchars($data['processed_by']); ?></td>
-</tr>
-
-<tr>
-<td class="label">Processed At</td>
-<td><?php echo htmlspecialchars($data['processed_at']); ?></td>
-</tr>
-
-<tr>
-<td class="label">Staff Remark</td>
-<td><?php echo !empty($data['staff_remark']) ? htmlspecialchars($data['staff_remark']) : '-'; ?></td>
+<td colspan="2">: <?php echo htmlspecialchars($data['medium']); ?></td>
 </tr>
 
 </table>
+
+<div class="sign-row">
+
+<div class="sign">
+Asst. / ASO
+</div>
+
+<div class="sign">
+Section Officer
+</div>
+
+<div class="sign">
+Asst. / Dy. Registrar
+</div>
+
+</div>
+
+</div>
+
+
+<!-- STUDENT COPY -->
+
+<div class="copy-box">
+
+<div class="header">
+
+<img src="../../image/Univ.png" class="logo">
+
+<div class="uni-title">UNIVERSITY OF MADRAS</div>
+<div class="ide">INSTITUTE OF DISTANCE EDUCATION</div>
+<div class="addr">CHEPAUK, CHENNAI - 600 005</div>
+<div class="addr">Phone : 25613708, E-Mail: ide.director@gmail.com</div>
+
+<div class="title">PROVISIONAL ADMISSION INTIMATION</div>
+
+<div class="copy-label">STUDENT COPY</div>
+
+</div>
+
+<table>
+
+<tr>
+<td class="label">Programme</td>
+<td>: <?php echo htmlspecialchars($data['programme_name']); ?></td>
+<td>Date : <?php echo $date; ?></td>
+</tr>
+
+<tr>
+<td class="label">Name</td>
+<td colspan="2">: <?php echo htmlspecialchars($data['name']); ?></td>
+</tr>
+
+<tr>
+<td class="label">Enrolment Number</td>
+<td colspan="2">: <?php echo htmlspecialchars($data['enrollment_no'] ?? ''); ?></td>
+</tr>
+
+<tr>
+<td class="label">Year of Admission</td>
+<td colspan="2">: <?php echo date("Y"); ?></td>
+</tr>
+
+<tr>
+<td class="label">Fees to be paid (in Rupees)</td>
+<td colspan="2">: </td>
+</tr>
+
+<tr>
+<td class="label">Original Certificates returned herewith</td>
+<td colspan="2">: </td>
+</tr>
+
+<tr>
+<td class="label">Medium</td>
+<td colspan="2">: <?php echo htmlspecialchars($data['medium']); ?></td>
+</tr>
+
+</table>
+
+<div class="sign-row">
+
+<div class="sign">
+Asst. / ASO
+</div>
+
+<div class="sign">
+Section Officer
+</div>
+
+<div class="sign">
+Asst. / Dy. Registrar
+</div>
+
+</div>
+
+</div>
+
+</div>
 
 </body>
 </html>
