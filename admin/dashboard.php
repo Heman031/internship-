@@ -17,6 +17,17 @@ $ug  = $conn->query("SELECT COUNT(*) c FROM records WHERE course_type='UG'")->fe
 $pg  = $conn->query("SELECT COUNT(*) c FROM records WHERE course_type='PG'")->fetch_assoc()['c'];
 $dip = $conn->query("SELECT COUNT(*) c FROM records WHERE course_type='DIP'")->fetch_assoc()['c'];
 $cert= $conn->query("SELECT COUNT(*) c FROM records WHERE course_type='CERT'")->fetch_assoc()['c'];
+
+$oc  = $conn->query("SELECT COUNT(*) c FROM records WHERE community='OC'")->fetch_assoc()['c'];
+$bc  = $conn->query("SELECT COUNT(*) c FROM records WHERE community='BC'")->fetch_assoc()['c'];
+$mbc = $conn->query("SELECT COUNT(*) c FROM records WHERE community='MBC'")->fetch_assoc()['c'];
+$sc  = $conn->query("SELECT COUNT(*) c FROM records WHERE community='SC'")->fetch_assoc()['c'];
+$st  = $conn->query("SELECT COUNT(*) c FROM records WHERE community='ST'")->fetch_assoc()['c'];
+
+$male = $conn->query("SELECT COUNT(*) c FROM records WHERE gender='Male'")->fetch_assoc()['c'];
+$female = $conn->query("SELECT COUNT(*) c FROM records WHERE gender='Female'")->fetch_assoc()['c'];
+$transgender = $conn->query("SELECT COUNT(*) c FROM records WHERE gender='Transgender'")->fetch_assoc()['c'];
+
 ?>
 
 <!DOCTYPE html>
@@ -47,13 +58,13 @@ $cert= $conn->query("SELECT COUNT(*) c FROM records WHERE course_type='CERT'")->
 
 <div class="sidebar">
 <h2>Admin Panel</h2>
-
 <a href="dashboard.php">Dashboard</a>
 <a href="admission/list.php">Applications</a>
-<a href="staff_management.php">Staff Management</a>
+<a href="staff_management.php">staff Dashboard</a>
 <a href="logout.php">Logout</a>
-
 </div>
+
+
 
 <div class="main">
 
@@ -99,6 +110,46 @@ $cert= $conn->query("SELECT COUNT(*) c FROM records WHERE course_type='CERT'")->
 <a href="admission/list.php?type=CERT" class="card red">
 <h3>Certificate Applications</h3>
 <p><?php echo $cert; ?></p>
+</a>
+
+<a href="admission/list.php?community=OC" class="card blue">
+<h3>OC Applications</h3>
+<p><?php echo $oc; ?></p>
+</a>
+
+<a href="admission/list.php?community=BC" class="card orange">
+<h3>BC Applications</h3>
+<p><?php echo $bc; ?></p>
+</a>
+
+<a href="admission/list.php?community=MBC" class="card green">
+<h3>MBC Applications</h3>
+<p><?php echo $mbc; ?></p>
+</a>
+
+<a href="admission/list.php?community=SC" class="card red">
+<h3>SC Applications</h3>
+<p><?php echo $sc; ?></p>
+</a>
+
+<a href="admission/list.php?community=ST" class="card purple">
+<h3>ST Applications</h3>
+<p><?php echo $st; ?></p>
+</a>
+
+<a href="admission/list.php?gender=Male" class="card orange">
+<h3>Male Applicants</h3>
+<p><?php echo $male; ?></p>
+</a>
+
+<a href="admission/list.php?gender=Female" class="card green">
+<h3>Female Applicants</h3>
+<p><?php echo $female; ?></p>
+</a>
+
+<a href="admission/list.php?gender=Transgender" class="card red">
+<h3>Transgender Applicants</h3>
+<p><?php echo $transgender; ?></p>
 </a>
 
 </div>

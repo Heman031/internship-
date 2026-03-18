@@ -51,6 +51,8 @@ if($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['bulk_action'])){
 $search = $_GET['search'] ?? '';
 $status = $_GET['status'] ?? '';
 $type   = $_GET['type'] ?? '';
+$gender = $_GET['gender'] ?? '';
+$community = $_GET['community'] ?? '';
 $page   = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 
 $limit = 10;
@@ -81,6 +83,19 @@ if($type){
     $types .= "s";
 }
 
+/* Gender Filter */
+if($gender){
+    $where .= " AND gender=?";
+    $params[] = $gender;
+    $types .= "s";
+}
+
+/* Community Filter */
+if($community){
+    $where .= " AND community=?";
+    $params[] = $community;
+    $types .= "s";
+}
 /* Total Count */
 $countSql = "SELECT COUNT(*) as c FROM records $where";
 $countStmt = $conn->prepare($countSql);

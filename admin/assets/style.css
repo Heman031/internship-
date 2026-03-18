@@ -781,3 +781,28 @@ font-weight:bold;
 .edit-staff-btn:hover{
     background:#1e40af;
 }
+
+.exam-table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px;
+}
+
+.exam-table th,
+.exam-table td{
+    border:1px solid #000;
+    padding:8px;
+    text-align:center;
+}
+
+.exam-table th{
+    background:#e6e6e6;
+    font-weight:bold;
+}
+
+.exam-table tr:nth-child(even){
+    background:#f9f9f9;
+}
+table td {
+    padding:6px 8px;
+}

@@ -9,6 +9,11 @@ $states = $pdo->query("SELECT * FROM states ORDER BY state_name ASC")->fetchAll(
 $districts = $pdo->query("SELECT * FROM districts ORDER BY district_name ASC")->fetchAll();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $gender = $_POST['gender'] ?? '';
+
+if(empty($gender)){
+    die("Gender is required.");
+}
     /* ===== DOB VALIDATION ===== */
     if (empty($_POST['dob'])) {
         die("Date of Birth required.");
@@ -92,7 +97,9 @@ if (!empty($_FILES['photo']['name'])) {
 
 $disability_certificate = null;
 
-if (!empty($_POST['special_status']) && !empty($_FILES['special_file']['name'])) {
+if (!empty($_POST['special_status']) 
+    && $_POST['special_status'] != "None"
+    && !empty($_FILES['special_file']['name'])) {
 
     $uploadDir = "uploads/" . $application_no . "/";
 
@@ -115,14 +122,18 @@ if (!empty($_POST['special_status']) && !empty($_FILES['special_file']['name']))
 if ($_POST['course_type'] !== "UG") {
     $_POST['foundation_lang'] = null;
 }
+
+/* ===== SPECIAL STATUS VALUE ===== */
+
+$differently_abled = $_POST['special_status'] ?? "None";
     /* ===== INSERT USING PDO ===== */
-    $sql = "INSERT INTO records (
+   $sql = "INSERT INTO records (
     application_no, course_type, foundation_lang, programme_name,
     main_subject, medium, differently_abled, photo,
     disability_certificate,
     name, street, town, state, district, pincode,
     phone, mobile,
-    name_english, name_tamil, email, dob, age,
+    name_english, name_tamil, email, dob, age, gender,
     guardian_name, mother_name, aadhaar, nationality,
     religion, mother_tongue, blood_group, community, caste,
     employment_status, employment_type
@@ -132,7 +143,7 @@ if ($_POST['course_type'] !== "UG") {
     :disability_certificate,
     :name, :street, :town, :state, :district, :pincode,
     :phone, :mobile,
-    :name_english, :name_tamil, :email, :dob, :age,
+    :name_english, :name_tamil, :email, :dob, :age, :gender,
     :guardian_name, :mother_name, :aadhaar, :nationality,
     :religion, :mother_tongue, :blood_group, :community, :caste,
     :employment_status, :employment_type
@@ -161,6 +172,7 @@ if ($_POST['course_type'] !== "UG") {
         ':email' => $_POST['email'],
         ':dob' => $_POST['dob'],
         ':age' => $age,
+        ':gender' => $gender,
         ':guardian_name' => $_POST['guardian_name'],
         ':mother_name' => $_POST['mother_name'],
         ':aadhaar' => $_POST['aadhaar'],
@@ -272,26 +284,28 @@ if ($_POST['course_type'] !== "UG") {
   <label>Specially Challenged Status <span class="required-star">*</span></label><br>
 
   <div class="inline">
-    <label class="radio-item">
-      <input type="checkbox" name="special_status[]" value="Differently Abled" onchange="toggleSpecialFile()">
-      Differently Abled
-    </label>
 
-    <label class="radio-item">
-      <input type="checkbox" name="special_status[]" value="Visually Challenged" onchange="toggleSpecialFile()">
-      Visually Challenged
-    </label>
+<label class="radio-item">
+<input type="radio" name="special_status" value="Differently Abled" onchange="toggleSpecialFile()">
+Differently Abled
+</label>
 
-    <label class="radio-item">
-      <input type="checkbox" name="special_status[]" value="Prisoner" onchange="toggleSpecialFile()">
-      Prisoner
-    </label>
+<label class="radio-item">
+<input type="radio" name="special_status" value="Visually Challenged" onchange="toggleSpecialFile()">
+Visually Challenged
+</label>
 
-    <label class="radio-item">
-      <input type="checkbox" name="special_status[]" value="None" onchange="toggleSpecialFile()">
-      None
-    </label>
-  </div>
+<label class="radio-item">
+<input type="radio" name="special_status" value="Prisoner" onchange="toggleSpecialFile()">
+Prisoner
+</label>
+
+<label class="radio-item">
+<input type="radio" name="special_status" value="None" onchange="toggleSpecialFile()" checked>
+None
+</label>
+
+</div>
 
   <!-- File Upload -->
   <div id="specialFileBox" style="margin-top:10px; display:none;">
@@ -741,36 +755,17 @@ document.getElementById("name_english").addEventListener("input", function() {
 <script>
 function toggleSpecialFile() {
 
-  const checkboxes = document.querySelectorAll('input[name="special_status[]"]');
-  const noneBox = document.querySelector('input[value="None"]');
-  const fileBox = document.getElementById("specialFileBox");
+  const selected =
+    document.querySelector('input[name="special_status"]:checked').value;
 
-  let showFile = false;
+  const fileBox =
+    document.getElementById("specialFileBox");
 
-  checkboxes.forEach(cb => {
-
-    if (cb.value === "None" && cb.checked) {
-
-      // Uncheck all others
-      checkboxes.forEach(c => {
-        if (c.value !== "None") {
-          c.checked = false;
-        }
-      });
-
-      showFile = false;
-
-    } else if (cb.value !== "None" && cb.checked) {
-
-      // Uncheck None
-      noneBox.checked = false;
-      showFile = true;
-
-    }
-
-  });
-
-  fileBox.style.display = showFile ? "block" : "none";
+  if(selected === "None"){
+      fileBox.style.display = "none";
+  }else{
+      fileBox.style.display = "block";
+  }
 
 }
 </script>

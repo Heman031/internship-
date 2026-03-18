@@ -12,6 +12,26 @@ if($id <= 0){
     die("Invalid Application ID.");
 }
 
+/* APPROVE CATEGORY */
+
+if(isset($_POST['approve_category'])){
+
+$cat = $_POST['approve_category'];
+
+$stmt = $conn->prepare("
+UPDATE records
+SET approved_category=?
+WHERE id=?
+");
+
+$stmt->bind_param("si",$cat,$id);
+$stmt->execute();
+
+header("Location:view.php?id=".$id);
+exit;
+
+}
+
 /* Fetch Application */
 $stmt = $conn->prepare("
     SELECT r.*, s.state_name 
@@ -22,6 +42,24 @@ $stmt = $conn->prepare("
 $stmt->bind_param("i", $id);
 $stmt->execute();
 $data = $stmt->get_result()->fetch_assoc();
+
+/* SPECIAL CATEGORY APPROVAL */
+
+if(isset($_POST['approve_concession'])){
+
+$stmt = $conn->prepare("
+UPDATE records
+SET concession_approved='yes'
+WHERE id=?
+");
+
+$stmt->bind_param("i",$id);
+$stmt->execute();
+
+header("Location:view.php?id=".$id);
+exit;
+
+}
 
 if(!$data){
     die("Application not found.");
@@ -43,152 +81,146 @@ if($_SERVER['REQUEST_METHOD'] === "POST"){
     }
 
     switch($action){
-case "approve":
 
-$status = "Approved";
+        case "approve":
 
-if(empty($data['medium'])){
-    die("Please select medium before approving.");
-}
+            $status = "Approved";
 
-if(empty($data['enrollment_no'])){
+            if(empty($data['medium'])){
+                die("Please select medium before approving.");
+            }
 
-    /* Admission Cycle */
-    $month = date("n");
-    $period = ($month <= 6) ? "A" : "C";
+            /* ================= ENROLLMENT GENERATION ================= */
 
-    /* Last 2 digits of year */
-    $year = date("y");
+            if(empty($data['enrollment_no'])){
 
-    $centerCode = "101";
+                $month = date("n");
+                $period = ($month <= 6) ? "A" : "C";
 
-    /* Detect Course Table */
-    if($data['course_type'] == "UG"){
-        $courseTable = "ug_courses";
-    }
-    elseif($data['course_type'] == "PG"){
-        $courseTable = "pg_courses";
-    }
-    elseif($data['course_type'] == "DIP"){
-        $courseTable = "diploma_courses";
-    }
-    else{
-        $courseTable = "certificate_courses";
-    }
+                $year = date("y");
+                $centerCode = "101";
 
-    /* Fetch Course Code */
-    $getCourse = $conn->prepare("
-        SELECT course_code
-        FROM $courseTable
-        WHERE programme_degree=? 
-        AND main_subject=?
-        LIMIT 1
-    ");
+                /* Course Table */
+                if($data['course_type'] == "UG"){
+                    $courseTable = "ug_courses";
+                }
+                elseif($data['course_type'] == "PG"){
+                    $courseTable = "pg_courses";
+                }
+                elseif($data['course_type'] == "DIP"){
+                    $courseTable = "diploma_courses";
+                }
+                else{
+                    $courseTable = "certificate_courses";
+                }
 
-    $getCourse->bind_param(
-        "ss",
-        $data['programme_name'],
-        $data['main_subject']
-    );
+                /* Get Course Code */
+                $getCourse = $conn->prepare("
+                    SELECT course_code
+                    FROM $courseTable
+                    WHERE programme_degree=? AND main_subject=?
+                    LIMIT 1
+                ");
 
-    $getCourse->execute();
-    $courseRow = $getCourse->get_result()->fetch_assoc();
+                $getCourse->bind_param("ss",
+                    $data['programme_name'],
+                    $data['main_subject']
+                );
 
-    if(!$courseRow){
-        die("Course code not found.");
-    }
+                $getCourse->execute();
+                $courseRow = $getCourse->get_result()->fetch_assoc();
 
-    $courseCode = strtoupper(trim($courseRow['course_code']));
+                if(!$courseRow){
+                    die("Course code not found.");
+                }
 
-    /* Build Prefix */
-    $prefix = $period.$year.$centerCode.$courseCode;
+                $courseCode = strtoupper(trim($courseRow['course_code']));
 
-    /* Medium numbering */
-    $medium = strtolower(trim($data['medium']));
+                /* PREFIX */
+                $prefix = $period.$year.$centerCode.$courseCode;
 
-    if($medium == "english"){
-        $startNumber = 6001;
-    }
-    elseif($medium == "tamil"){
-        $startNumber = 5001;
-    }
-    else{
-        die("Invalid medium.");
-    }
-
-    /* Find last enrollment number based on MEDIUM ONLY */
+               /* MEDIUM */
+$medium = strtolower(trim($data['medium']));
 
 if($medium == "english"){
-    
-    $check = $conn->prepare("
-        SELECT MAX(CAST(RIGHT(enrollment_no,4) AS UNSIGNED)) AS last_number
-        FROM records
-        WHERE CAST(RIGHT(enrollment_no,4) AS UNSIGNED) >= 6001
-    ");
-
+    $startNumber = 6001;
 }
 elseif($medium == "tamil"){
-
-    $check = $conn->prepare("
-        SELECT MAX(CAST(RIGHT(enrollment_no,4) AS UNSIGNED)) AS last_number
-        FROM records
-        WHERE CAST(RIGHT(enrollment_no,4) AS UNSIGNED) >= 5001
-        AND CAST(RIGHT(enrollment_no,4) AS UNSIGNED) < 6000
-    ");
-
+    $startNumber = 1001;
+}
+else{
+    die("Invalid medium.");
 }
 
+/* LOCK */
+$lock = $conn->query("SELECT GET_LOCK('enroll_lock', 5) AS l")->fetch_assoc();
+
+if($lock['l'] != 1){
+    die("System busy. Try again.");
+}
+
+/* GET LAST NUMBER (GLOBAL PER MEDIUM ONLY) */
+$check = $conn->prepare("
+    SELECT MAX(CAST(SUBSTRING(enrollment_no, -4) AS UNSIGNED)) AS last_number
+    FROM records
+    WHERE LOWER(TRIM(medium)) = ?
+");
+
+$check->bind_param("s", $medium);
 $check->execute();
 $res = $check->get_result()->fetch_assoc();
 
-if(!empty($res['last_number'])){
+/* NEXT NUMBER */
+if($res['last_number'] !== null){
     $newNumber = $res['last_number'] + 1;
-}else{
+} else {
     $newNumber = $startNumber;
 }
 
-    /* Format serial */
-    $newNumber = str_pad($newNumber,4,"0",STR_PAD_LEFT);
+/* FORMAT */
+$newNumber = str_pad($newNumber, 4, "0", STR_PAD_LEFT);
 
-    $enrollmentNo = $prefix.$newNumber;
+/* FINAL ENROLLMENT */
+$enrollmentNo = $prefix . $newNumber;
 
-    /* Save Enrollment */
-    $save = $conn->prepare("
-        UPDATE records
-        SET enrollment_no=?
-        WHERE id=?
-    ");
+/* SAVE */
+$save = $conn->prepare("
+    UPDATE records SET enrollment_no=? WHERE id=?
+");
+$save->bind_param("si", $enrollmentNo, $id);
+$save->execute();
 
-    $save->bind_param("si",$enrollmentNo,$id);
-    $save->execute();
-}
+/* RELEASE LOCK */
+$conn->query("SELECT RELEASE_LOCK('enroll_lock')");
+            }
 
-break;
-
-    case "reject":
-        $status = "Rejected";
         break;
 
-    case "pending":
-        $status = "Pending";
+        case "reject":
+            $status = "Rejected";
         break;
 
-    default:
-        $status = $data['status'];
+        case "pending":
+            $status = "Pending";
+        break;
+
+        default:
+            $status = $data['status'];
     }
 
+    /* FINAL UPDATE */
     $update = $conn->prepare("
         UPDATE records 
         SET status=?, staff_remark=?, processed_by=?, processed_at=NOW()
         WHERE id=?
     ");
+
     $update->bind_param("sssi", $status, $remark, $admin, $id);
     $update->execute();
 
     header("Location: view.php?id=".$id);
     exit();
-}
- /* PHOTO PATH */
+} /* PHOTO PATH */
 $baseURL  = "/admission/admission-form/uploads/";
 $basePath = $_SERVER['DOCUMENT_ROOT'] . $baseURL;
 $appFolder = $data['application_no'] . "/";
@@ -399,6 +431,8 @@ No Photo
 <tr><td>Name (Tamil)</td><td><?php echo $data['name_tamil'] ?? '-'; ?></td></tr>
 <tr><td>DOB</td><td><?php echo $data['dob'] ?? '-'; ?></td></tr>
 <tr><td>Age</td><td><?php echo $data['age'] ?? '-'; ?></td></tr>
+<tr><td>Gender</td><td><?php echo $data['gender
+'] ?? '-'; ?></td></tr>
 <tr><td>Mobile</td><td><?php echo $data['mobile'] ?? '-'; ?></td></tr>
 <tr><td>Email</td><td><?php echo $data['email'] ?? '-'; ?></td></tr>
 <tr><td>Nationality</td><td><?php echo $data['nationality'] ?? '-'; ?></td></tr>
@@ -472,6 +506,8 @@ if(!empty($data['abc_id'])){
     echo 'Not Available';
 }
 ?>
+
+
 </td>
 </tr>
 
@@ -535,6 +571,64 @@ echo '<a class="doc-btn" target="_blank" href="'.$baseURL.$appFolder.$data[$key]
 ?>
 </div>
 </div>
+
+<div class="section">
+<h3 style="font-weight:bold; letter-spacing:1px;">EXAMINATION DETAILS</h3>
+
+<table class="exam-table">
+<tr>
+    <th>Exam</th>
+    <th>Institution</th>
+    <th>Board</th>
+    <th>Year</th>
+    <th>Reg No</th>
+    <th>Grade</th>
+    <th>Max Marks</th>
+</tr>
+
+<tr>
+    <td>SSLC</td>
+    <td><?php echo $data['sslc_school'] ?? '-'; ?></td>
+    <td><?php echo $data['sslc_board'] ?? '-'; ?></td>
+    <td><?php echo $data['sslc_year'] ?? '-'; ?></td>
+    <td><?php echo $data['sslc_reg_no'] ?? '-'; ?></td>
+    <td><?php echo $data['sslc_grade'] ?? '-'; ?></td>
+    <td><?php echo $data['sslc_max_marks'] ?? '-'; ?></td>
+</tr>
+
+<tr>
+    <td>HSC</td>
+    <td><?php echo $data['hsc_school'] ?? '-'; ?></td>
+    <td><?php echo $data['hsc_board'] ?? '-'; ?></td>
+    <td><?php echo $data['hsc_year'] ?? '-'; ?></td>
+    <td><?php echo $data['hsc_reg_no'] ?? '-'; ?></td>
+    <td><?php echo $data['hsc_grade'] ?? '-'; ?></td>
+    <td><?php echo $data['hsc_max_marks'] ?? '-'; ?></td>
+</tr>
+
+<tr>
+    <td>DIP</td>
+    <td><?php echo $data['dip_school'] ?? '-'; ?></td>
+    <td><?php echo $data['dip_board'] ?? '-'; ?></td>
+    <td><?php echo $data['dip_year'] ?? '-'; ?></td>
+    <td><?php echo $data['dip_reg_no'] ?? '-'; ?></td>
+    <td><?php echo $data['dip_grade'] ?? '-'; ?></td>
+    <td><?php echo $data['dip_max_marks'] ?? '-'; ?></td>
+</tr>
+
+<tr>
+    <td>UG</td>
+    <td><?php echo $data['ug_school'] ?? '-'; ?></td>
+    <td><?php echo $data['ug_board'] ?? '-'; ?></td>
+    <td><?php echo $data['ug_year'] ?? '-'; ?></td>
+    <td><?php echo $data['ug_reg_no'] ?? '-'; ?></td>
+    <td><?php echo $data['ug_grade'] ?? '-'; ?></td>
+    <td><?php echo $data['ug_max_marks'] ?? '-'; ?></td>
+</tr>
+
+</table>
+</div>
+
 <div class="section">
 <h3>Application Status Details</h3>
 
@@ -565,6 +659,46 @@ echo '<a class="doc-btn" target="_blank" href="'.$baseURL.$appFolder.$data[$key]
 </table>
 
 </div>
+
+
+<div style="margin-top:20px;background:#fff3cd;padding:12px;border-radius:6px;">
+<b>Approve Fee Concession</b>
+
+<form method="post" style="margin-top:10px;">
+
+<div class="btn-group">
+
+<button type="submit" name="approve_category" value="GENERAL"
+class="btn btn-sm <?php if($approved_category=='GENERAL') echo 'btn-success'; else echo 'btn-outline-secondary'; ?>">
+General
+</button>
+
+<button type="submit" name="approve_category" value="VC"
+class="btn btn-sm <?php if($approved_category=='VC') echo 'btn-success'; else echo 'btn-outline-secondary'; ?>">
+VC
+</button>
+
+<button type="submit" name="approve_category" value="DA"
+class="btn btn-sm <?php if($approved_category=='DA') echo 'btn-success'; else echo 'btn-outline-secondary'; ?>">
+DA
+</button>
+
+<button type="submit" name="approve_category" value="PRISONER"
+class="btn btn-sm <?php if($approved_category=='PRISONER') echo 'btn-success'; else echo 'btn-outline-secondary'; ?>">
+Prisoner
+</button>
+
+<button type="submit" name="approve_category" value="STAFF"
+class="btn btn-sm <?php if($approved_category=='STAFF') echo 'btn-success'; else echo 'btn-outline-secondary'; ?>">
+Staff
+</button>
+
+</div>
+
+</form>
+</div>
+
+
 <!-- APPROVAL -->
 <div class="approval-box">
 <h3>APPROVAL PANEL</h3>
@@ -576,6 +710,7 @@ echo '<a class="doc-btn" target="_blank" href="'.$baseURL.$appFolder.$data[$key]
 <button type="submit" name="action" value="approve" class="btn approve">Approve</button>
 <button type="submit" name="action" value="reject" class="btn reject">Reject</button>
 <button type="submit" name="action" value="pending" class="btn view">Set Pending</button>
+
 </form>
 
 </div>

@@ -22,8 +22,19 @@ $course_type = $getCourse->fetchColumn();
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $other_course = $_POST['other_course'] ?? null;
     $other_course_details = $_POST['other_course_details'] ?? null;
-    $defence_personnel = isset($_POST['defence_personnel']) ? 1 : 0;
-    $ex_servicemen = isset($_POST['ex_servicemen']) ? 1 : 0;
+    $defence_personnel = 0;
+$ex_servicemen = 0;
+
+if(isset($_POST['defence_status'])){
+    
+    if($_POST['defence_status'] == "defence"){
+        $defence_personnel = 1;
+    }
+
+    if($_POST['defence_status'] == "ex"){
+        $ex_servicemen = 1;
+    }
+}
     $abc_status = $_POST['abc'] ?? "No";
 $abc_id = $_POST['abc_id'] ?? null;
 /* Remove spaces */
@@ -265,15 +276,24 @@ foreach ($docFields as $field) {
   <div class="form-row">
     <label>25. Ward of Defence Personnel / Ex-Servicemen <span class="required-star">*</span></label>
     <div class="inline">
-      <label class="radio-item">
-        <input type="checkbox" name="defence_personnel" value="1">
-      </label>
-      <label class="radio-item">
-        <input type="checkbox" name="ex_servicemen" value="1">
-      </label>
-      <label class="radio-item">
-        <input type="checkbox">None
-      </label>
+     <div class="radio-group">
+
+<label class="radio-item">
+<input type="radio" name="defence_status" value="defence" required>
+Defence Personnel
+</label>
+
+<label class="radio-item">
+<input type="radio" name="defence_status" value="ex">
+Ex-Servicemen
+</label>
+
+<label class="radio-item">
+<input type="radio" name="defence_status" value="none">
+None
+</label>
+
+</div>
     </div>
   </div>
 </fieldset>

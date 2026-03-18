@@ -228,12 +228,14 @@ $photoURL  = "uploads/" . $appNo . "/" . $photoFile;
 </div>
 </div>
 
-<hr>
+
+
 
 <div><strong>APPLICATION NO:</strong> <?php echo $appNo; ?></div>
-
-
 <hr>
+
+
+
 
 <!-- COURSE DETAILS -->
 <div class="section-title">COURSE DETAILS</div>
@@ -248,8 +250,18 @@ $photoURL  = "uploads/" . $appNo . "/" . $photoFile;
     <div class="col">
         <div class="row"><span class="label">Main Subject:</span> <?php echo show('main_subject',$data); ?></div>
         <div class="row"><span class="label">Medium:</span> <?php echo show('medium',$data); ?></div>
-        <div class="row"><span class="label">Specially Challenged Status:</span> <?php echo !empty($data['differently_abled']) ? htmlspecialchars($data['differently_abled']) : 'Not Applicable'; ?></div>
-    
+<div class="row">
+<span class="label">Specially Challenged:</span>
+<?php
+$status = $data['differently_abled'] ?? '';
+
+if ($status && $status != 'None') {
+    echo htmlspecialchars($status);
+} else {
+    echo "Not Applicable";
+}
+?>
+</div>    
     
     </div>
 </div>
@@ -268,6 +280,7 @@ $photoURL  = "uploads/" . $appNo . "/" . $photoFile;
         <div class="row"><span class="label">Age:</span> <?php echo show('age',$data); ?></div>
         <div class="row"><span class="label">Father Name:</span> <?php echo show('guardian_name',$data); ?></div>
         <div class="row"><span class="label">Religion:</span> <?php echo show('religion',$data); ?></div>
+        <div class="row"><span class="label">Gender:</span> <?php echo show('gender',$data); ?></div>
     </div>
 
     <div class="col">
@@ -276,6 +289,7 @@ $photoURL  = "uploads/" . $appNo . "/" . $photoFile;
         <div class="row"><span class="label">Aadhaar:</span> <?php echo show('aadhaar',$data); ?></div>
         <div class="row"><span class="label">Mother Name:</span> <?php echo show('mother_name',$data); ?></div>
         <div class="row"><span class="label">Community:</span> <?php echo show('community',$data); ?></div>
+        <div class="row"><span class="label">Caste:</span> <?php echo show('caste',$data); ?></div>
     </div>
 </div>
 
@@ -370,11 +384,9 @@ $abcID     = $data['abc_id'] ?? '';
 
 <!-- 1. ABC -->
 <div style="margin-bottom:12px;">
-<strong>Academic Bank of Credit (ABC)</strong><br>
 
-<?php echo ($abcStatus == "Yes") ? "☑" : "☐"; ?> Yes
-&nbsp;&nbsp;
-<?php echo ($abcStatus == "No") ? "☑" : "☐"; ?> No
+<strong>Academic Bank of Credit (ABC):</strong>
+<?php echo htmlspecialchars($abcStatus ?: 'Not Provided'); ?>
 
 <?php if($abcStatus == "Yes" && !empty($abcID)): ?>
 <div style="margin-top:6px;">
@@ -389,12 +401,8 @@ $formattedABC = trim(chunk_split($abcID, 4, ' '));
 
 <!-- 2. Other Course -->
 <div style="margin-bottom:12px;">
-<strong>Are you undergoing any other course in a College / University?</strong><br>
-
-<?php echo ($data['other_course'] == "Yes") ? "☑" : "☐"; ?> Yes
-&nbsp;&nbsp;
-<?php echo ($data['other_course'] == "No") ? "☑" : "☐"; ?> No
-
+<strong>Are you undergoing any other course in a College / University?</strong>
+<?php echo htmlspecialchars($data['other_course'] ?? 'No'); ?>
 <?php if($data['other_course'] == "Yes" && !empty($data['other_course_details'])): ?>
 <div style="margin-top:6px;">
 <strong>Details:</strong>
@@ -406,19 +414,17 @@ $formattedABC = trim(chunk_split($abcID, 4, ' '));
 
 <!-- 3. Defence -->
 <div style="margin-bottom:12px;">
-<strong>Ward of Defence Personnel / Ex-Servicemen</strong><br>
+<strong>Ward of Defence Personnel / Ex-Servicemen:</strong>
 
-<?php echo (!empty($data['defence_personnel'])) ? "☑" : "☐"; ?>
-Defence Personnel
-
-&nbsp;&nbsp;&nbsp;
-
-<?php echo (!empty($data['ex_servicemen'])) ? "☑" : "☐"; ?>
-Ex-Servicemen
-
-&nbsp;&nbsp;&nbsp;
-<?php echo (!empty($data['none'])) ? "☑" : "☐"; ?>
-None
+<?php
+if(!empty($data['defence_personnel'])){
+    echo "Defence Personnel";
+}elseif(!empty($data['ex_servicemen'])){
+    echo "Ex-Servicemen";
+}else{
+    echo "None";
+}
+?>
 </div>
 
 </div>
@@ -457,6 +463,27 @@ None
 <td><?php echo show('hsc_grade',$data); ?></td>
 <td><?php echo show('hsc_max_marks',$data); ?></td>
 </tr>
+
+<tr>
+<td>DIP</td>
+<td><?php echo show('dip_school',$data); ?></td>
+<td><?php echo show('dip_board',$data); ?></td>
+<td><?php echo show('dip_pass_year',$data); ?></td>
+<td><?php echo show('dip_reg_no',$data); ?></td>
+<td><?php echo show('dip_grade',$data); ?></td>
+<td><?php echo show('dip_max_marks',$data); ?></td>
+</tr>
+
+<tr>
+<td>UG</td>
+<td><?php echo show('ug_school',$data); ?></td>
+<td><?php echo show('ug_board',$data); ?></td>
+<td><?php echo show('ug_pass_year',$data); ?></td>
+<td><?php echo show('ug_reg_no',$data); ?></td>
+<td><?php echo show('ug_grade',$data); ?></td>
+<td><?php echo show('ug_max_marks',$data); ?></td>
+</tr>
+
 </table>
 
 <hr>
@@ -472,6 +499,7 @@ $files = [
 'ug_file' => 'UG Marks / Provisional / Degree',
 'tc_file' => 'Transfer Certificate',
 'migration_file' => 'Migration Certificate',
+'disability_certificate' => 'Disability Certificate',
 'undertaking_file' => 'Undertaking'
 ];
 
@@ -518,8 +546,19 @@ $declarationChecked = "☑";
     <!-- RIGHT SIDE -->
     <div style="text-align:right;">
         <div style="margin-top:40px;">
+            <div style="text-align:center;">    
+<?php
+$signFile = trim($data['signature_file'] ?? '');
+$signPath = __DIR__ . "/uploads/" . $appNo . "/" . $signFile;
+$signURL  = "uploads/" . $appNo . "/" . $signFile;
+?>
+
+<?php if(!empty($signFile) && file_exists($signPath)): ?>
+<img src="<?php echo $signURL; ?>" style="width:150px; height:40px;">
+<?php endif; ?>
+</div>
     <strong>Signature of Applicant</strong>
-    <img src="../../uploads/<?php echo $data['application_no']; ?>/<?php echo $data['signature_file']; ?>" width="120">
+
         </div>
     </div>
 
