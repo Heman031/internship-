@@ -32,6 +32,16 @@ exit;
 
 }
 
+if(isset($_POST['verify_cert'])){
+
+    $update = $conn->prepare("UPDATE records SET certificate_verified = 1 WHERE id = ?");
+    $update->bind_param("i", $id);
+    $update->execute();
+
+    header("Location: ".$_SERVER['REQUEST_URI']);
+    exit;
+}
+
 /* Fetch Application */
 $stmt = $conn->prepare("
     SELECT r.*, s.state_name 
@@ -98,7 +108,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST"){
                 $period = ($month <= 6) ? "A" : "C";
 
                 $year = date("y");
-                $centerCode = "101";
+                $centerCode = !empty($data['lsc_code']) ? $data['lsc_code'] : "101";
 
                 /* Course Table */
                 if($data['course_type'] == "UG"){
@@ -697,6 +707,33 @@ Staff
 
 </form>
 </div>
+<form method="POST" style="margin-top:15px;">
+
+    <?php if($data['certificate_verified'] == 0): ?>
+
+        <button type="submit" name="verify_cert"
+        style="background:green; color:white; padding:8px 15px; border:none; border-radius:5px;">
+            Verify Certificates
+        </button>
+
+    <?php else: ?>
+
+        <button disabled
+        style="background:gray; color:white; padding:8px 15px; border:none; border-radius:5px;">
+            Already Verified
+        </button>
+
+    <?php endif; ?>
+
+</form>
+<p>
+<b>Certificate Status :</b> 
+<?php 
+echo ($data['certificate_verified'] == 1) 
+    ? '<span style="color:green;">Verified</span>' 
+    : '<span style="color:red;">Not Verified</span>';
+?>
+</p>
 
 
 <!-- APPROVAL -->

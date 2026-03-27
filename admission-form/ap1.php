@@ -126,9 +126,11 @@ if ($_POST['course_type'] !== "UG") {
 /* ===== SPECIAL STATUS VALUE ===== */
 
 $differently_abled = $_POST['special_status'] ?? "None";
+
     /* ===== INSERT USING PDO ===== */
+   $lsc_code = $_SESSION['lsc_code'] ?? null;
    $sql = "INSERT INTO records (
-    application_no, course_type, foundation_lang, programme_name,
+    application_no, lsc_code, course_type, foundation_lang, programme_name,
     main_subject, medium, differently_abled, photo,
     disability_certificate,
     name, street, town, state, district, pincode,
@@ -138,7 +140,7 @@ $differently_abled = $_POST['special_status'] ?? "None";
     religion, mother_tongue, blood_group, community, caste,
     employment_status, employment_type
 ) VALUES (
-    :application_no, :course_type, :foundation_lang, :programme_name,
+    :application_no, :lsc_code, :course_type, :foundation_lang, :programme_name,
     :main_subject, :medium, :differently_abled, :photo,
     :disability_certificate,
     :name, :street, :town, :state, :district, :pincode,
@@ -148,9 +150,11 @@ $differently_abled = $_POST['special_status'] ?? "None";
     :religion, :mother_tongue, :blood_group, :community, :caste,
     :employment_status, :employment_type
 )";
+    
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
         ':application_no' => $application_no,
+        ':lsc_code' => $lsc_code,
         ':course_type' => $_POST['course_type'],
         ':foundation_lang' => ($_POST['course_type'] === "UG") ? $_POST['foundation_lang'] : null,
         ':programme_name' => $_POST['programme_name'],

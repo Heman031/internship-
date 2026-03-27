@@ -366,6 +366,8 @@ margin:10mm;
 }
 
 }
+
+
 </style>
 </style>
 </head>
@@ -395,16 +397,32 @@ margin:10mm;
 
 <table>
 
-<tr>
 <td class="label">Programme</td>
-<td>: <?php echo htmlspecialchars($data['programme_name']); ?></td>
+<td>: 
+    <?php 
+        echo htmlspecialchars($data['programme_name'] ?? '') . 
+        ' - ' . 
+        htmlspecialchars($data['main_subject'] ?? ''); 
+    ?>
+</td>
 <td>Date : <?php echo $date; ?></td>
 </tr>
 
+<?php
+$name_en = $data['name'] ?? '';
+$name_ta = $data['name_tamil'] ?? '';
+
+$full_name = $name_en;
+if(!empty($name_ta)){
+    $full_name .= ' - ' . $name_ta;
+}
+?>
+
 <tr>
 <td class="label">Name</td>
-<td colspan="2">: <?php echo htmlspecialchars($data['name']); ?></td>
+<td>: <?php echo htmlspecialchars($full_name); ?></td>
 </tr>
+
 
 <tr>
 <td class="label">Enrolment Number</td>
@@ -416,55 +434,47 @@ margin:10mm;
 <td colspan="2">: <?php echo date("Y"); ?></td>
 </tr>
 
-<tr>
-<td colspan="3">
-
-<table style="width:100%; font-size:15px; border-collapse:collapse;">
-
-<tr>
-<td>General Fee</td>
-<td style="text-align:right;">₹ <?php echo $G; ?></td>
-</tr>
-
-<tr>
-<td>Special Fee</td>
-<td style="text-align:right;">₹ <?php echo $SF; ?></td>
-</tr>
-
-<tr>
-<td>Tuition Fee</td>
-<td style="text-align:right;">₹ <?php echo $TF; ?></td>
-</tr>
-
-<tr>
-<td colspan="2"><hr></td>
-</tr>
-
-<tr>
-<td style="color:green;">
-Concession (<?php echo $category; ?>)
-</td>
-<td style="text-align:right; color:green;">
-- ₹ <?php echo $concession; ?>
-</td>
-</tr>
-
-<tr>
-<td colspan="2"><hr></td>
-</tr>
-
-<tr>
-<td><b>Total Fees</b></td>
-<td style="text-align:right;"><b>₹ <?php echo $total_fee; ?></b></td>
-</tr>
+<td class="label">Fees to be paid (in Rupees)</td>
+<td colspan="2">: ₹ <?php echo number_format($total_fee); ?> /- </td>
 
 </table>
 
 
 <tr>
 <td class="label">Original Certificates returned herewith</td>
-<td colspan="2">: </td>
+<td colspan="2"> </td>
 </tr>
+<tr>
+<td class="label"></td>
+<td colspan="2">: 
+<?php 
+echo ($data['certificate_verified'] == 1) 
+    ? 'Certificates Verified' 
+    : 'Certificates Not Verified';
+?>
+</td>
+</tr>
+
+</table>   <!-- CLOSE TABLE FIRST -->
+
+<!-- NOW ADD YOUR LINE -->
+<div style="margin-top:15px; font-size:16px;">
+
+    <b>DOB :</b> <?php echo htmlspecialchars($data['dob'] ?? ''); ?>
+
+    &nbsp;&nbsp;&nbsp;&nbsp;
+
+    <b>Gender :</b> <?php echo htmlspecialchars($data['gender'] ?? ''); ?>
+
+    &nbsp;&nbsp;&nbsp;&nbsp;
+
+    <b>Mobile :</b> <?php echo htmlspecialchars($data['mobile'] ?? ''); ?>
+
+    &nbsp;&nbsp;&nbsp;&nbsp;
+
+    <b>Email :</b> <?php echo htmlspecialchars($data['email'] ?? ''); ?>
+
+</div>
 
 <tr>
 <td class="label">Medium</td>
@@ -494,6 +504,10 @@ Asst. / Dy. Registrar
 
 <!-- STUDENT COPY -->
 
+
+
+
+
 <div class="copy-box">
 
 <div class="header">
@@ -515,14 +529,21 @@ Asst. / Dy. Registrar
 
 <tr>
 <td class="label">Programme</td>
-<td>: <?php echo htmlspecialchars($data['programme_name']); ?></td>
+<td>: 
+    <?php 
+        echo htmlspecialchars($data['programme_name'] ?? '') . 
+        ' - ' . 
+        htmlspecialchars($data['main_subject'] ?? ''); 
+    ?>
+</td>
 <td>Date : <?php echo $date; ?></td>
 </tr>
 
 <tr>
 <td class="label">Name</td>
-<td colspan="2">: <?php echo htmlspecialchars($data['name']); ?></td>
+<td>: <?php echo htmlspecialchars($full_name); ?></td>
 </tr>
+
 
 <tr>
 <td class="label">Enrolment Number</td>
@@ -535,55 +556,46 @@ Asst. / Dy. Registrar
 </tr>
 
 <td class="label">Fees to be paid (in Rupees)</td>
-<td colspan="2">: ₹ <?php echo number_format($total_fee); ?></td>
-<tr>
-<td colspan="3">
-
-<table style="width:100%; font-size:15px; border-collapse:collapse;">
-
-<tr>
-<td>General Fee</td>
-<td style="text-align:right;">₹ <?php echo $G; ?></td>
-</tr>
-
-<tr>
-<td>Special Fee</td>
-<td style="text-align:right;">₹ <?php echo $SF; ?></td>
-</tr>
-
-<tr>
-<td>Tuition Fee</td>
-<td style="text-align:right;">₹ <?php echo $TF; ?></td>
-</tr>
-
-<tr>
-<td colspan="2"><hr></td>
-</tr>
-
-<tr>
-<td style="color:green;">
-Concession (<?php echo $category; ?>)
-</td>
-<td style="text-align:right; color:green;">
-- ₹ <?php echo $concession; ?>
-</td>
-</tr>
-
-<tr>
-<td colspan="2"><hr></td>
-</tr>
-
-<tr>
-<td><b>Total Fees</b></td>
-<td style="text-align:right;"><b>₹ <?php echo $total_fee; ?></b></td>
-</tr>
+<td colspan="2">: ₹ <?php echo number_format($total_fee); ?> /- </td>
 
 </table>
 
+
 <tr>
 <td class="label">Original Certificates returned herewith</td>
-<td colspan="2">: </td>
+<td colspan="2"> </td>
 </tr>
+<tr>
+<td class="label"></td>
+<td colspan="2">: 
+<?php 
+echo ($data['certificate_verified'] == 1) 
+    ? 'Certificates Verified' 
+    : 'Certificates Not Verified';
+?>
+</td>
+</tr>
+
+</table>   <!-- CLOSE TABLE FIRST -->
+
+<!-- NOW ADD YOUR LINE -->
+<div style="margin-top:15px; font-size:16px;">
+
+    <b>DOB :</b> <?php echo htmlspecialchars($data['dob'] ?? ''); ?>
+
+    &nbsp;&nbsp;&nbsp;&nbsp;
+
+    <b>Gender :</b> <?php echo htmlspecialchars($data['gender'] ?? ''); ?>
+
+    &nbsp;&nbsp;&nbsp;&nbsp;
+
+    <b>Mobile :</b> <?php echo htmlspecialchars($data['mobile'] ?? ''); ?>
+
+    &nbsp;&nbsp;&nbsp;&nbsp;
+
+    <b>Email :</b> <?php echo htmlspecialchars($data['email'] ?? ''); ?>
+
+</div>
 
 <tr>
 <td class="label">Medium</td>
@@ -606,6 +618,7 @@ Section Officer
 Asst. / Dy. Registrar
 </div>
 
+</div>
 </div>
 
 </div>

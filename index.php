@@ -83,9 +83,9 @@ z-index:9999;
 .rules-box{
     background:#fff;
     width:600px;
-    max-height:700px;
+    max-height:800px;
     overflow-y:auto;
-    border-radius:8px;
+    border-radius:10px;
     box-shadow:0 8px 25px rgba(0,0,0,0.4);
     animation:popupAnim 0.4s ease;
     font-family:Arial;
@@ -189,6 +189,28 @@ transform:scale(1);
 opacity:1;
 }
 }
+
+.scroll-notice {
+    height: 120px;           /* visible area */
+    overflow: hidden;
+    position: relative;
+}
+
+.scroll-notice ul {
+    position: absolute;
+    width: 100%;
+    animation: scrollUp 10s linear infinite;
+}
+
+@keyframes scrollUp {
+    0% {
+        top: 100%;
+    }
+    100% {
+        top: -100%;
+    }
+}
+
 
 </style>
 <script>
@@ -307,6 +329,8 @@ University of Madras – Institute of Distance Education
 <a href="#">About Us</a>
 <a href="#">Contact Us</a>
 <a href="admin/login.php">Admin Panel</a>
+<a href="lsclogin.php">LSC Login</a>
+<a href="singlewindow/index.php">S-W-L</a>
 </nav>
 
 </div>
@@ -331,12 +355,16 @@ University of Madras – Institute of Distance Education
 <div class="notice-box">
 <h4>📢 Important Notices</h4>
 
+<div class="scroll-notice">
 <ul>
 <li>Admissions open for Academic Year 2025–2026</li>
 <li>Last date for UG applications: <strong>30 June 2025</strong></li>
 <li>Online payment facility available for all programmes</li>
 <li>Hall ticket download notification will be announced shortly</li>
 </ul>
+</div>
+
+</div>
 
 </div>
 </div>
