@@ -112,8 +112,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 /* LOGIN BOX */
 .white-wrapper {
     width: 500px;
+    height: 500px; /* reduce this value */
     background: #ffffff;
-    border-radius: 6px;
+    border-radius: 2px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.25);
     overflow: hidden;
 }

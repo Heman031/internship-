@@ -145,7 +145,7 @@ button:hover{
 <!-- LOGIN BOX -->
 <div class="login-container">
 
-<h2>LSC Login</h2>
+<h2>LSC CENTER AUTHENTICATION PORTAL</h2>
 
 <div class="info">
 🔐 This portal is restricted to authorized LSC centers only.

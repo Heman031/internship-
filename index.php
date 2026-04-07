@@ -13,56 +13,7 @@ $response = "";
 
 <style>
 
-.chatbot-box{
-position:fixed;
-bottom:20px;
-right:20px;
-width:300px;
-background:#ffffff;
-border:1px solid #ccc;
-border-radius:10px;
-box-shadow:0 0 10px rgba(0,0,0,0.2);
-font-family:Arial;
-}
 
-.chatbot-header{
-background:#0a6ea8;
-color:white;
-padding:10px;
-text-align:center;
-border-radius:10px 10px 0 0;
-}
-
-.chatbot-body{
-padding:10px;
-max-height:200px;
-overflow-y:auto;
-font-size:14px;
-}
-
-.chatbot-body p{
-margin:5px 0;
-}
-
-.chatbot-input{
-padding:10px;
-border-top:1px solid #ddd;
-}
-
-.chatbot-input input[type=text]{
-width:100%;
-padding:6px;
-margin-bottom:5px;
-}
-
-.chatbot-input input[type=submit]{
-width:100%;
-padding:6px;
-background:#0a6ea8;
-color:white;
-border:none;
-cursor:pointer;
-}
 /* RULES POPUP */
 
 #rulesPopup{
@@ -177,6 +128,98 @@ border-radius:4px;
 cursor:pointer;
 }
 
+/* STEPS SECTION */
+
+.steps-section {
+    padding: 20px 20px;
+    background: #f4f6f9;
+    text-align: center;
+}
+
+.steps-title {
+    font-size: 32px;
+    font-weight: bold;
+    color: #0a3d62;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.steps-title::after {
+    content: "";
+    width: 80px;
+    height: 4px;
+    background: #0a3d62;
+    display: block;
+    margin: 10px auto;
+    border-radius: 5px;
+}
+
+/* STEP CARD */
+
+.step {
+    background: #1f5aa6;
+    color: white;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 800px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    transition: 0.3s;
+}
+
+.step:hover {
+    transform: translateY(-5px);
+}
+
+/* NUMBER */
+
+.step-number {
+    font-size: 40px;
+    font-weight: bold;
+    opacity: 0.9;
+}
+
+/* CONTENT */
+
+.step-content {
+    text-align: left;
+    flex: 1;
+    margin: 0 20px;
+}
+
+.step-content h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.step-content p {
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* ICON */
+
+.step-icon {
+    background: white;
+    color: black;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 28px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
 /* ANIMATION */
 
 @keyframes popupAnim{
@@ -230,6 +273,7 @@ document.getElementById("rulesPopup").style.display="none";
 <p style="font-size:16px; font-weight:bold; color:#d9534f; text-align:center;">
 ⚠ Please read the instructions carefully before clicking "Read & Continue".
 </p>
+
 
 <div class="rules-body">
 
@@ -375,6 +419,65 @@ University of Madras – Institute of Distance Education
 
 
 
+<!-- STEPS SECTION -->
+<section class="steps-section">
+
+    <h2 class="steps-title">STEPS TO FOLLOW</h2>
+
+    <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+            <h3>REGISTER</h3>
+            <p>Create your account on the portal using basic details.
+            This activates your profile and starts your admission journey.</p>
+        </div>
+        <div class="step-icon">📝</div>
+    </div>
+
+    <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+            <h3>LOGIN</h3>
+            <p>Fill in the application form with academic and personal info.
+            Review carefully before submission.</p>
+        </div>
+        <div class="step-icon">🖱️</div>
+    </div>
+
+    <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+            <h3>PAY FEE</h3>
+            <p>Make the application fee payment securely online.
+            This ensures your form is processed.</p>
+        </div>
+        <div class="step-icon">💳</div>
+    </div>
+
+    <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+            <h3>DOCUMENT VERIFICATION & TOKEN FEE</h3>
+            <p>Get documents verified by the admissions team.
+            Pay token fee to confirm your interest.</p>
+        </div>
+        <div class="step-icon">✔️</div>
+    </div>
+
+    <div class="step">
+        <div class="step-number">5</div>
+        <div class="step-content">
+            <h3>FINAL ADMISSION</h3>
+            <p>Receive official confirmation of your admission.
+            Your seat is now secured.</p>
+        </div>
+        <div class="step-icon">🎓</div>
+    </div>
+
+</section>
+
+
+
 
 <!-- FOOTER -->
 <footer>
@@ -410,6 +513,8 @@ facility has been introduced.
 <p>© 2025 University of Madras. All Rights Reserved.</p>
 
 </div>
+
+
 
 </footer>
 

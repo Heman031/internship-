@@ -9,10 +9,12 @@ if(!isset($_SESSION['staff'])){
 
 $type = $_SESSION['department'];
 $search = $_GET['search'] ?? '';
-
 if(!empty($search)){
 
 $searchTerm = "%".$search."%";
+
+// ⭐ CONDITION: If search contains 'UBA'
+$order = (stripos($search, 'UBA') !== false || stripos($search, 'A26') !== false) ? "ASC" : "DESC";
 
 $stmt = $conn->prepare("
 SELECT * FROM records 
@@ -23,7 +25,7 @@ OR enrollment_no LIKE ?
 OR name LIKE ?
 OR mobile LIKE ?
 )
-ORDER BY id DESC
+ORDER BY id $order
 ");
 
 $stmt->bind_param("sssss",$type,$searchTerm,$searchTerm,$searchTerm,$searchTerm);
@@ -37,6 +39,8 @@ ORDER BY id DESC
 ");
 
 $stmt->bind_param("s",$type);
+
+
 
 }
 

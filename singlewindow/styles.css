@@ -1,0 +1,515 @@
+/* ===============================
+   GLOBAL RESET
+================================ */
+* {
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* ===============================
+   HEADER
+================================ */
+.top-header {
+  background: #0a6ea8;
+  color: #fff;
+  padding: 6px ;
+  position: fixed;       /* 🔥 Fix header */
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.app {
+  width: 95%;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  width: 150px;
+  margin-right: 15px;
+}
+
+.nav a {
+  color: #fff;
+  margin-left: 15px;
+  text-decoration: none;
+}
+
+/* ===============================
+   BANNER (FIXED BACKGROUND)
+================================ */
+.banner {
+  min-height: 50vh;
+  background: url("image/back.jpeg") center center no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  display: flex;
+  justify-content: center;
+  padding: 130px 0 40px 0;  /* 🔥 Top padding added */
+}
+
+/* ===============================
+   FORM CONTAINER
+================================ */
+.container {
+  width: 1000px;
+  background: #faf8f8;
+  border: 1px solid #000;
+  padding: 30px;
+  margin: auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* ===============================
+   FORM HEADER
+================================ */
+.form-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.form-header h1 {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.form-header p {
+  font-size: 13px;
+}
+
+/* ===============================
+   PROGRAMME DETAILS LAYOUT
+================================ */
+.programme-fieldset {
+  position: relative;
+}
+
+.programme-content-wrapper {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+.programme-left {
+  flex: 1;
+}
+
+/* ===============================
+   PROGRAMME DETAILS FIXED
+================================ */
+
+/* ===============================
+   PASSPORT PHOTO — FINAL ALIGN FIX
+================================ */
+
+.programme-fieldset {
+  position: relative;
+}
+
+/* Passport outer box */
+.programme-fieldset .photo-box {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 3.5cm;
+  height: 4.5cm;
+  border: 1px solid #000;
+  padding: 5px;
+  background: #fff;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Label text */
+.photo-box label {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+/* Upload area perfectly fitted */
+.upload-area {
+  width: 100%;
+  flex: 1;                 /* takes remaining height */
+  border: 1px dashed #999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  font-size: 12px;
+  cursor: pointer;
+  background: #fafafa;
+}
+
+/* Image preview fit */
+.upload-area img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+
+/* Upload text */
+.upload-area span {
+  text-align: center;
+  color: #333;
+}
+
+/* Prevent form overlap */
+.programme-left {
+  margin-right: 5cm;
+}
+
+/* ===============================
+   PASSPORT PHOTO (CORRECT)
+================================ */
+.photo-box {
+  width: 3.5cm;      /* Passport width */
+  height: 4.5cm;     /* Passport height */
+  border: 1px solid #000;
+  padding: 8px;
+  background: #fff;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.photo-box label {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+}
+
+
+.upload-area img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+
+
+/* ===============================
+   LANGUAGE GRID
+================================ */
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px 40px;
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+.note-text {
+  font-size: 12px;
+  font-style: italic;
+  margin-top: 6px;
+}
+
+/* ===============================
+   FIELDSETS
+================================ */
+fieldset {
+  border: 1px solid #000;
+  margin-bottom: 25px;
+  padding: 20px;
+}
+
+legend {
+  font-weight: bold;
+  padding: 0 5px;
+}
+
+/* ===============================
+   FORM LAYOUT
+================================ */
+.form-row {
+  margin-bottom: 15px;
+}
+
+.form-row3 {
+  width: 70%;
+  margin-bottom: 15px;
+}
+
+.form-row.wide {
+  width: 70%;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-bottom: 15px;
+}
+.header{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px 0;
+}
+
+.header .logo{
+    width:90px;
+    margin-right:25px;
+}
+
+.header-text{
+    text-align:center;
+}
+
+.header-text h2{
+    margin:0;
+    font-size:24px;
+    font-weight:bold;
+}
+
+.header-text h3{
+    margin:5px 0;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.header-text .sub{
+    margin-top:8px;
+    font-size:18px;
+}
+
+.photo{
+    width:120px;
+    height:140px;
+    border:1px solid #000;
+    object-fit:cover;
+}
+
+/* ===============================
+   INPUTS
+================================ */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+input[type="date"],
+select {
+  width: 100%;
+  padding: 6px;
+  border: 1px solid #000;
+  font-size: 14px;
+}
+
+/* ===============================
+   RADIO / CHECKBOX
+================================ */
+.inline {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+  margin-top: 5px;
+  flex-wrap: wrap;
+}
+
+/* ===============================
+   BUTTONS
+================================ */
+.actions {
+  text-align: center;
+  margin-top: 30px;
+}
+
+button {
+  padding: 8px 25px;
+  border: 1px solid #000;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+button:hover {
+  background: #0a6ea8;
+  color: #fff;
+}
+
+button.secondary {
+  margin-left: 10px;
+}
+.upload-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.upload-row label {
+    width: 300px;
+    font-weight: 600;
+}
+
+.upload-row input[type="file"] {
+    flex: 1;
+}
+
+/* ===============================
+   FOOTER
+================================ */
+footer {
+  background: #111;
+  color: #fff;
+  text-align: center;
+  padding: 15px;
+}
+
+/* ===============================
+   EXAM TABLE
+================================ */
+.table-wrapper {
+  overflow-x: auto;
+  margin-top: 15px;
+}
+
+.exam-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  background: #fff;
+}
+
+.exam-table th,
+.exam-table td {
+  border: 1px solid #000;
+  padding: 8px;
+  text-align: center;
+}
+
+.exam-table th {
+  background: #f2f2f2;
+  font-weight: bold;
+}
+
+.exam-table td:first-child {
+  font-weight: bold;
+  text-align: left;
+}
+
+.exam-table input {
+  width: 100%;
+  height: 28px;
+  border: none;
+  outline: none;
+  background: transparent;
+  text-align: center;
+  font-size: 13px;
+}
+
+
+.required-star {
+  color: red;
+  font-weight: bold;
+  margin-left: 4px;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border: 1px solid #0a6ea8;
+  box-shadow: 0 0 3px #0a6ea8;
+}
+/* ===============================
+   RESPONSIVE
+================================ */
+@media (max-width: 900px) {
+
+  .container {
+    width: 95%;
+  }
+
+  .programme-content-wrapper {
+    flex-direction: column;
+  }
+
+  .photo-box {
+    margin-top: 20px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================
+   RADIO BUTTON ALIGNMENT FIX (EMPLOYMENT)
+========================================= */
+
+/* Force radios to stay inline */
+input[type="radio"] {
+  width: auto !important;
+  margin: 0;
+  padding: 0;
+}
+
+/* Radio group layout */
+.radio-group {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+/* Label + radio alignment */
+.radio-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+/* Employment section spacing */
+#employmentOptions {
+  margin-top: 12px;
+  padding-left: 2px;
+}
+
+/* Error Field Highlight */
+.error-field {
+  border: 2px solid red !important;
+  background-color: #ffe6e6;
+}
+
+/* Error Message */
+.error-text {
+  color: red;
+  font-size: 13px;
+  margin-top: 4px;
+}
+.form-buttons {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.form-buttons button {
+    padding: 10px 25px;
+    font-size: 12px;
+    margin: 0 10px;
+    border: 1px solid #333;
+    background: #f5f5f5;
+    cursor: pointer;
+}
+
+.form-buttons button:hover {
+    background: #e0e0e0;
+}

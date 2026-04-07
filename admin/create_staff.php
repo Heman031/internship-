@@ -7,21 +7,36 @@ if(!isset($_SESSION['admin'])){
     exit();
 }
 
-if(isset($_POST['create']))
-{
-$username = $_POST['username'];
-$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-$department = $_POST['department'];
+if(isset($_POST['create'])){
 
-$sql = "INSERT INTO staff_users(username,password,department)
-VALUES('$username','$password','$department')";
+    $username   = trim($_POST['username']);
+    $password   = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $department = $_POST['department'];
 
-mysqli_query($conn,$sql);
+    if(empty($username) || empty($department)){
+        echo "<script>alert('All fields are required');</script>";
+    } else {
 
-echo "<script>alert('Staff Created Successfully');</script>";
+        // ✅ IF ADMIN USER
+        if($department == "ADMIN"){
+
+            $stmt = $conn->prepare("INSERT INTO admin_users (username, password, department) VALUES (?, ?, ?)");
+            $stmt->bind_param("sss", $username, $password, $department);
+
+        } else {
+            // ✅ NORMAL STAFF
+            $stmt = $conn->prepare("INSERT INTO staff_users (username, password, department) VALUES (?, ?, ?)");
+            $stmt->bind_param("sss", $username, $password, $department);
+        }
+
+        if($stmt->execute()){
+            echo "<script>alert('User Created Successfully');</script>";
+        } else {
+            echo "<script>alert('Error creating user');</script>";
+        }
+    }
 }
 ?>
-
 <!DOCTYPE html>
 
 <html>
@@ -92,10 +107,13 @@ University of Madras – Institute of Distance Education
 <label>Department</label>
 
 <select name="department">
+      <option value="">Select Department</option>
 <option value="UG">UG Application</option>
 <option value="PG">PG Application</option>
 <option value="DIP">Diploma Application</option>
 <option value="CERT">Certificate Application</option>
+<option value="SWA">Single Window</option>
+<option value="ADMIN">Admin Users</option>
 </select>
 
 </div>

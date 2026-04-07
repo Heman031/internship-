@@ -741,15 +741,34 @@ echo ($data['certificate_verified'] == 1)
 <h3>APPROVAL PANEL</h3>
 
 <form method="POST">
-<label>Incharge Remark</label>
-<textarea name="remark" rows="3" required></textarea>
-<br><br>
+
+<label><b>Select Remark</b></label><br><br>
+
+<label>
+    <input type="radio" name="remark" value="Documents Verified" required>
+    Documents Verified
+</label><br>
+
+<label>
+    <input type="radio" name="remark" value="Eligible for Admission">
+    Eligible for Admission
+</label><br>
+
+<label>
+    <input type="radio" name="remark" value="Incomplete Documents">
+    Incomplete Documents
+</label><br>
+
+<label>
+    <input type="radio" name="remark" value="Rejected due to mismatch">
+    Rejected due to mismatch
+</label><br><br>
+
 <button type="submit" name="action" value="approve" class="btn approve">Approve</button>
 <button type="submit" name="action" value="reject" class="btn reject">Reject</button>
 <button type="submit" name="action" value="pending" class="btn view">Set Pending</button>
 
 </form>
-
 </div>
 
 </div>

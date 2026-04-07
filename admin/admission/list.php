@@ -59,6 +59,13 @@ $limit = 10;
 $start = ($page - 1) * $limit;
 
 $where = " WHERE 1=1 ";
+/* USER FILTER (FROM DASHBOARD CLICK) */
+if(isset($_GET['type']) && $_GET['type'] == "user"){
+    $application_no = $_SESSION['application_no'] ?? '';
+    if(!empty($application_no)){
+        $where .= " AND application_no='$application_no'";
+    }
+}
 $params = [];
 $types = "";
 

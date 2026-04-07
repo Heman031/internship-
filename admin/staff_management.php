@@ -59,7 +59,10 @@ if(!isset($_SESSION['admin'])){
 <h3>Manage Staff</h3>
 <p>Edit or delete staff accounts</p>
 </a>
-
+<a href="edit_swl.php" class="card orange">
+<h3>SWL Management</h3>
+<p>Manage Study Centers (LSC/SWL)</p>
+</a>
 </div>
 
 </div>
