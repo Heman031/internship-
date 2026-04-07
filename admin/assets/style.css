@@ -806,3 +806,14 @@ font-weight:bold;
 table td {
     padding:6px 8px;
 }
+.action-cell {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+}
+
+.action-cell .btn {
+    padding: 5px 10px;
+    font-size: 13px;
+}

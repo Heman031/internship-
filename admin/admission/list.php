@@ -59,23 +59,17 @@ $limit = 10;
 $start = ($page - 1) * $limit;
 
 $where = " WHERE 1=1 ";
-/* USER FILTER (FROM DASHBOARD CLICK) */
-if(isset($_GET['type']) && $_GET['type'] == "user"){
-    $application_no = $_SESSION['application_no'] ?? '';
-    if(!empty($application_no)){
-        $where .= " AND application_no='$application_no'";
-    }
-}
 $params = [];
 $types = "";
 
 if($search){
-    $where .= " AND (application_no LIKE ? OR name LIKE ? OR mobile LIKE ?)";
+    $where .= " AND (application_no LIKE ? OR enrollment_no LIKE ? OR name LIKE ? OR mobile LIKE ?)";
     $searchTerm = "%$search%";
     $params[] = $searchTerm;
     $params[] = $searchTerm;
     $params[] = $searchTerm;
-    $types .= "sss";
+    $params[] = $searchTerm;
+    $types .= "ssss";
 }
 
 if($status){
@@ -115,7 +109,7 @@ $totalPages = ceil($totalRows / $limit);
 
 /* Main Query */
 $sql = "
-SELECT id, application_no, name, course_type, programme_name,
+SELECT id, application_no,enrollment_no, name, course_type, programme_name,
 mobile, status, created_at
 FROM records
 $where
@@ -172,7 +166,7 @@ function toggleSelectAll(source) {
 
 <!-- FILTER FORM -->
 <form method="GET" class="filter-form">
-<input type="text" name="search" placeholder="Search ID / Name / Mobile"
+<input type="text" name="search" placeholder="Search ID /Enrollment No/ Name / Mobile"
 value="<?php echo htmlspecialchars($search); ?>">
 
 <select name="status">
@@ -202,6 +196,7 @@ value="<?php echo htmlspecialchars($search); ?>">
 <tr>
 <th><input type="checkbox" onclick="toggleSelectAll(this)"></th>
 <th>Application ID</th>
+<th>Enrollment NO</th>
 <th>Name</th>
 <th>Course</th>
 <th>Mobile</th>
@@ -216,7 +211,15 @@ value="<?php echo htmlspecialchars($search); ?>">
 <tr>
 <td><input type="checkbox" name="ids[]" value="<?php echo $row['id']; ?>"></td>
 <td><?php echo $row['application_no']; ?></td>
-
+<td>
+<?php
+if($row['status'] == "Approved" && !empty($row['enrollment_no'])){
+    echo "<strong>".$row['enrollment_no']."</strong>";
+} else {
+    echo "-";
+}
+?>
+</td>
 <td><?php echo $row['name']; ?></td>
 <td><?php echo $row['programme_name']; ?></td>
 <td><?php echo $row['mobile']; ?></td>
@@ -233,12 +236,9 @@ echo "<span class='badge rejected'>Rejected</span>";
 
 <td><?php echo date("d-m-Y", strtotime($row['created_at'])); ?></td>
 
-<td>
+<td class="action-cell">
 <a class="btn view" href="view.php?id=<?php echo $row['id']; ?>">View</a>
-<a class="btn edit"
-href="edit.php?id=<?php echo $row['id']; ?>">
-Edit
-</a>
+<a class="btn edit" href="edit.php?id=<?php echo $row['id']; ?>">Edit</a>
 </td>
 </tr>
 <?php endwhile; ?>
