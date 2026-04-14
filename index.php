@@ -419,62 +419,6 @@ University of Madras – Institute of Distance Education
 
 
 
-<!-- STEPS SECTION -->
-<section class="steps-section">
-
-    <h2 class="steps-title">STEPS TO FOLLOW</h2>
-
-    <div class="step">
-        <div class="step-number">1</div>
-        <div class="step-content">
-            <h3>REGISTER</h3>
-            <p>Create your account on the portal using basic details.
-            This activates your profile and starts your admission journey.</p>
-        </div>
-        <div class="step-icon">📝</div>
-    </div>
-
-    <div class="step">
-        <div class="step-number">2</div>
-        <div class="step-content">
-            <h3>LOGIN</h3>
-            <p>Fill in the application form with academic and personal info.
-            Review carefully before submission.</p>
-        </div>
-        <div class="step-icon">🖱️</div>
-    </div>
-
-    <div class="step">
-        <div class="step-number">3</div>
-        <div class="step-content">
-            <h3>PAY FEE</h3>
-            <p>Make the application fee payment securely online.
-            This ensures your form is processed.</p>
-        </div>
-        <div class="step-icon">💳</div>
-    </div>
-
-    <div class="step">
-        <div class="step-number">4</div>
-        <div class="step-content">
-            <h3>DOCUMENT VERIFICATION & TOKEN FEE</h3>
-            <p>Get documents verified by the admissions team.
-            Pay token fee to confirm your interest.</p>
-        </div>
-        <div class="step-icon">✔️</div>
-    </div>
-
-    <div class="step">
-        <div class="step-number">5</div>
-        <div class="step-content">
-            <h3>FINAL ADMISSION</h3>
-            <p>Receive official confirmation of your admission.
-            Your seat is now secured.</p>
-        </div>
-        <div class="step-icon">🎓</div>
-    </div>
-
-</section>
 
 
 

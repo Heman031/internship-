@@ -96,16 +96,32 @@ body{
     }
 
     #printArea {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 850px;
-        border: 3px solid #4a6ea9;
-        border-radius: 15px;
-        padding: 20px;
-        font-family: 'Times New Roman';
-        background: #fff;
-    }
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 850px;
+    font-family: 'Times New Roman';
+}
+
+/* ADD THIS NEW BLOCK */
+#printArea::after {
+    content: "";
+    display: block;
+    page-break-after: always;
+}
+
+#printArea {
+    border: 3px solid #4a6ea9;
+    border-radius: 15px;
+    padding: 20px;
+    background: #fff;
+}
+
+/* DUPLICATE COPY USING CLONE EFFECT */
+#printArea:before {
+    content: attr(data-clone);
+    display: block;
+}
 
     input{border:none;}
 
@@ -386,7 +402,7 @@ if(isset($_GET['enrollment_no'])){
         }
 ?>
 
-<div class="card" id="printArea">
+<div class="card" id="printArea" data-clone="">
 
 <div class="header">
     <h2>UNIVERSITY OF MADRAS</h2>
@@ -488,7 +504,70 @@ function toggleEdit(){
 }
 
 function printPage(){
-    window.print();
+
+    var content = document.getElementById("printArea").innerHTML;
+
+    var printWindow = window.open('', '', 'width=900,height=650');
+
+    printWindow.document.write(`
+        <html>
+        <head>
+        <title>Print</title>
+        <style>
+            body {
+                font-family: 'Times New Roman';
+                margin: 10px;
+            }
+
+            .copy {
+                width: 850px;
+                margin: auto;
+                border: 3px solid #4a6ea9;
+                border-radius: 15px;
+                padding: 20px;
+                margin-bottom: 40px;
+            }
+
+            /* hide buttons & inputs */
+            .btn, input {
+                display: none !important;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            td {
+                padding: 6px 10px;
+            }
+
+            td b {
+                display: inline-block;
+                width: 130px;
+            }
+
+            .header h2,
+            .header h3,
+            .header p {
+                text-align: center;
+                margin: 3px 0;
+            }
+
+        </style>
+        </head>
+
+        <body>
+
+            <div class="copy">${content}</div>
+            <div class="copy">${content}</div>
+
+        </body>
+        </html>
+    `);
+
+    printWindow.document.close();
+    printWindow.print();
 }
 
 function downloadPDF(){

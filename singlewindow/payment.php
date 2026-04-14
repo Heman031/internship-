@@ -9,163 +9,90 @@ include("db.php"); // make sure $pdo is defined here
 <title>Payment Page</title>
 
 <style>
-.search-container{
-    width:100%;
-    display:flex;
-    justify-content:center;
-    margin-top:50px;
+body{
+    font-family: 'Segoe UI', sans-serif;
+    background:#eef2f7;
+    margin:0;
 }
-
-.search-form{
-    background:#ffffff;
-    padding:25px 30px;
-    border-radius:12px;
-    box-shadow:0 8px 25px rgba(0,0,0,0.1);
-    width:420px;
-}
-
-.search-form label{
-    font-weight:600;
-    color:#2c3e50;
-    display:block;
-    margin-bottom:10px;
-}
-
-.search-box-new{
-    display:flex;
-    gap:10px;
-}
-
-.search-box-new input{
-    flex:1;
-    padding:12px;
-    border:1px solid #ccc;
-    border-radius:8px;
-    font-size:14px;
-    outline:none;
-    transition:0.3s;
-}
-
-.search-box-new input:focus{
-    border-color:#4a6ea9;
-    box-shadow:0 0 5px rgba(74,110,169,0.3);
-}
-
-.search-box-new button{
-    padding:12px 18px;
-    background:linear-gradient(135deg,#4a6ea9,#2c3e50);
-    color:#fff;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-    font-weight:600;
-    transition:0.3s;
-}
-
-.search-box-new button:hover{
-    transform:translateY(-2px);
-    box-shadow:0 5px 15px rgba(0,0,0,0.2);
-}
-
-/* ===== TOP HEADER ===== */
 .top-header{
-    width:100%;
-     background:linear-gradient(135deg,#2374ad,#1b5c8a);
+    background:linear-gradient(135deg,#2374ad,#1b5c8a);
     color:#fff;
     padding:15px 30px;
     display:flex;
-    align-items:center;
-    justify-content:space-between;
-    box-shadow:0 3px 10px rgba(0,0,0,0.2);
-}
-
-.top-header .title{
-    font-size:20px;
-    font-weight:600;
-}
-
-.top-header .sub{
-    font-size:13px;
-    opacity:0.9;
-}
-
-/* ===== FOOTER ===== */
-.footer{
-    width:100%;
-    background:#2c3e50;
-    color:#fff;
-    text-align:center;
-    padding:12px;
-    margin-top:350px;
-    font-size:13px;
-}
-/* HEADER */
-.top-header{
-    width:100%;
-    background:linear-gradient(135deg,#2c3e50,#4a6ea9);
-    color:#fff;
-    padding:10px 25px;
-    display:flex;
     justify-content:space-between;
     align-items:center;
 }
-
-/* LEFT SIDE */
 .left-header{
     display:flex;
     align-items:center;
     gap:12px;
 }
-
-.left-header img{
-    width:50px;
-    height:50px;
-    object-fit:contain;
+.logo img{
+    width:55px;
+    height:55px;
     background:#fff;
     border-radius:50%;
     padding:5px;
 }
-
-/* TEXT */
-.title{
-    font-size:18px;
-    font-weight:bold;
+.container{
+    max-width:900px;
+    margin:30px auto;
+    padding:20px;
 }
-
-.sub{
-    font-size:12px;
-}
-
-/* RIGHT */
-.right-header{
-    font-size:14px;
-    font-weight:500;
-}
-
-/* HIDE IN PRINT */
-@media print{
-    .top-header{ display:none; }
-}
-
-/* HIDE HEADER & FOOTER IN PRINT */
-@media print{
-    .top-header,
-    .footer{
-        display:none;
-    }
-}
-
-.logo img {
-    width: 60px;   /* better size for header */
-    height: 60px;
-    object-fit: contain;
-    margin-right: 10px;
-}
-
-.left-header{
+.search-wrapper{
     display:flex;
-    align-items:center;
-}</style>
+    justify-content:center;
+    margin-top:30px;
+}
+.search-card{
+    background:#f5f7fa;
+    padding:25px;
+    border-radius:15px;
+    width:500px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+}
+.search-box-pro{
+    display:flex;
+    gap:10px;
+}
+.search-box-pro input{
+    flex:1;
+    padding:12px;
+    border-radius:10px;
+    border:1px solid #ccc;
+}
+.search-box-pro button{
+    background:linear-gradient(135deg,#2a5298,#1e3c72);
+    color:#fff;
+    border:none;
+    padding:12px 20px;
+    border-radius:10px;
+}
+.card{
+    background:#fff;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.08);
+    margin-top:20px;
+}
+.details{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:15px;
+}
+.details div{
+    background:#f7f9fc;
+    padding:10px;
+    border-radius:6px;
+}
+.footer{
+    background:#1e3c72;
+    color:#fff;
+    text-align:center;
+    padding:15px;
+    margin-top:300px;
+}
+</style>
 </head>
 
 <body>
@@ -308,14 +235,14 @@ if(isset($_POST['mark_paid'])){
     $enroll = $_POST['paid_enrollment'];
     $amount = $_POST['paid_amount'];
 
-    $stmt = $pdo->prepare("
-        UPDATE records 
-        SET fees = 0, paid_amount = ?, payment_date = NOW() 
-        WHERE enrollment_no = ?
-    ");
+   $stmt = $pdo->prepare("
+    UPDATE records 
+    SET paid_amount = ?, payment_date = NOW() 
+    WHERE enrollment_no = ?
+  ");
     $stmt->execute([$amount, $enroll]);
 
-    echo "<script>alert('Payment Stored Successfully');window.location.href='';</script>";
+    echo "<script> alert('Payment Stored Successfully'); window.location.href='?enrollment_no=".$enroll."'; </script>";
 }
 ?>
 

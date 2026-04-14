@@ -108,7 +108,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST"){
                 $period = ($month <= 6) ? "A" : "C";
 
                 $year = date("y");
-                $centerCode = !empty($data['lsc_code']) ? $data['lsc_code'] : "101";
+                
 
                 /* Course Table */
                 if($data['course_type'] == "UG"){
@@ -147,7 +147,7 @@ if($_SERVER['REQUEST_METHOD'] === "POST"){
                 $courseCode = strtoupper(trim($courseRow['course_code']));
 
                 /* PREFIX */
-                $prefix = $period.$year.$centerCode.$courseCode;
+                
 
                /* MEDIUM */
 $medium = strtolower(trim($data['medium']));
@@ -169,14 +169,58 @@ if($lock['l'] != 1){
     die("System busy. Try again.");
 }
 
-/* GET LAST NUMBER (GLOBAL PER MEDIUM ONLY) */
-$check = $conn->prepare("
-    SELECT MAX(CAST(SUBSTRING(enrollment_no, -4) AS UNSIGNED)) AS last_number
-    FROM records
-    WHERE LOWER(TRIM(medium)) = ?
-");
+/* CHECK TYPE */
+/* SLA (722,727) SHOULD ACT LIKE DIRECT */
+$isLSC = !empty($data['lsc_code']) && !in_array($data['lsc_code'], ['727','722']);
 
-$check->bind_param("s", $medium);
+if($isLSC){
+
+    /* ===== LSC (CENTER + MEDIUM) ===== */
+    $centerCode = ($data['lsc_code'] == '727') ? "101" : $data['lsc_code'];
+
+    if($data['lsc_code'] == '727'){
+
+    /* 🔥 SLA → CONTINUE DIRECT SERIES */
+    $check = $conn->prepare("
+        SELECT MAX(CAST(SUBSTRING(enrollment_no, -4) AS UNSIGNED)) AS last_number
+        FROM records
+        WHERE (lsc_code IS NULL OR lsc_code='' OR lsc_code='727')
+        AND LOWER(TRIM(medium)) = ?
+    ");
+
+    $check->bind_param("s", $medium);
+
+} else {
+
+    /* NORMAL LSC */
+    $check = $conn->prepare("
+        SELECT MAX(CAST(SUBSTRING(enrollment_no, -4) AS UNSIGNED)) AS last_number
+        FROM records
+        WHERE lsc_code = ?
+        AND LOWER(TRIM(medium)) = ?
+    ");
+
+    
+}
+
+    $check->bind_param("ss", $centerCode, $medium);
+
+} else {
+
+    /* ===== DIRECT ===== */
+    $centerCode = "101";
+
+    $check = $conn->prepare("
+        SELECT MAX(CAST(SUBSTRING(enrollment_no, -4) AS UNSIGNED)) AS last_number
+        FROM records
+        WHERE lsc_code IS NULL
+        AND LOWER(TRIM(medium)) = ?
+    ");
+
+    $check->bind_param("s", $medium);
+}
+
+/* EXECUTE */
 $check->execute();
 $res = $check->get_result()->fetch_assoc();
 
@@ -189,6 +233,7 @@ if($res['last_number'] !== null){
 
 /* FORMAT */
 $newNumber = str_pad($newNumber, 4, "0", STR_PAD_LEFT);
+$prefix = $period.$year.$centerCode.$courseCode;
 
 /* FINAL ENROLLMENT */
 $enrollmentNo = $prefix . $newNumber;
@@ -600,7 +645,7 @@ echo '<a class="doc-btn" target="_blank" href="'.$baseURL.$appFolder.$data[$key]
     <td>SSLC</td>
     <td><?php echo $data['sslc_school'] ?? '-'; ?></td>
     <td><?php echo $data['sslc_board'] ?? '-'; ?></td>
-    <td><?php echo $data['sslc_year'] ?? '-'; ?></td>
+    <td><?php echo $data['sslc_pass_year'] ?? '-'; ?></td>
     <td><?php echo $data['sslc_reg_no'] ?? '-'; ?></td>
     <td><?php echo $data['sslc_grade'] ?? '-'; ?></td>
     <td><?php echo $data['sslc_max_marks'] ?? '-'; ?></td>
@@ -610,7 +655,7 @@ echo '<a class="doc-btn" target="_blank" href="'.$baseURL.$appFolder.$data[$key]
     <td>HSC</td>
     <td><?php echo $data['hsc_school'] ?? '-'; ?></td>
     <td><?php echo $data['hsc_board'] ?? '-'; ?></td>
-    <td><?php echo $data['hsc_year'] ?? '-'; ?></td>
+    <td><?php echo $data['hsc_pass_year'] ?? '-'; ?></td>
     <td><?php echo $data['hsc_reg_no'] ?? '-'; ?></td>
     <td><?php echo $data['hsc_grade'] ?? '-'; ?></td>
     <td><?php echo $data['hsc_max_marks'] ?? '-'; ?></td>
